@@ -4,7 +4,7 @@
 #include <time.h>
 #define dT 0.01
 #define Tolerance 1e-8
-#define MAX_ITER 100000
+#define MAX_ITER 1000000
 
 #define resultados_beta "resultados/datos_sis.txt"
 
