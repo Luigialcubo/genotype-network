@@ -11,13 +11,16 @@ int main(){
     int iter;
 
     FILE *archivo;
+    FILE *archivo2;
     archivo = fopen(resultados_beta, "w");
-    if (archivo == NULL) {
+    archivo2 = fopen(rho_tiempo, "w");
+    if (archivo == NULL || archivo2 == NULL) {
         printf("Error: No se pudo abrir el archivo.\n");
         return 1; 
     }
 
     fprintf(archivo, "beta\trho_estacionario\n");
+    fprintf(archivo2, "tiempo\trho\n");
 
     for(beta; beta <= 1; beta += 0.01){
         parametros.beta = beta;
@@ -27,6 +30,9 @@ int main(){
 
         //Queremos que deje de actualizar rho cuando la diferencia de la actual y la antigua sea menor que la tolerancia.
         do{
+            if(fabs(beta-0.3) <= 1e-9){
+                fprintf(archivo2, "%f\t%f\n", t, rho);
+            }
             rho_viejo = rho;
             rho = paso_rk4(rho, parametros);
 
@@ -40,7 +46,8 @@ int main(){
     }
 
     fclose(archivo);
-    printf("Simulación terminada. Datos guardados en %s\n", resultados_beta);
+    fclose(archivo2);
+    printf("Simulación terminada. Datos guardados en %s y en %s\n", resultados_beta, rho_tiempo);
 
     return 0;
 };
