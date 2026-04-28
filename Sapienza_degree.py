@@ -1,8 +1,14 @@
+import os
 import networkx as net
 import matplotlib.pyplot as plt
 import numpy as np
-import infomap as Infmap
+from infomap import Infomap
+im = Infomap()
 
+output_dir = "resultados"
+
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
 
 archivo = "BWetal2022_2LCC.edge"
 
@@ -29,7 +35,11 @@ plt.title("Distribución de grados - H3N2")
 plt.yscale("log")
 plt.xscale("log")
 plt.tight_layout()
-plt.savefig("figura_2b_distribucion_grado.png", dpi=300)
+ruta = os.path.join(output_dir, "figura_2b_distribucion_grado.png")
+plt.savefig(ruta, dpi=300)
+
+print("Figura guardada en:", ruta)
+
 plt.show()
 
 # Cada nodo es un genotipo de H3N2 y Cada enlace indica que dos genotipos difieren 

@@ -1,8 +1,14 @@
 # La modularidad mide precisamente si existen esos grupos bien separados. 
 # Por eso necesitas Infomap antes de calcular Q.
+import os
 import networkx as nx
 import matplotlib.pyplot as plt
-from infomap import infomap as Infmap
+from infomap import Infomap
+im = Infomap()
+output_dir = "resultados"
+
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
 
 archivo = "BWetal2022_2LCC.edge"
 G = nx.read_edgelist(
@@ -22,7 +28,6 @@ print("¿Es conexa?", nx.is_connected(G))
 # En el contexto del paper, estas comunidades son importantes porque pueden comportarse 
 # como grupos de variantes capaces de sostener brotes o cambios de predominancia epidémica
 
-im = Infmap()
 
 for u, v in G.edges():
     im.add_link(int(u), int(v))
@@ -48,8 +53,6 @@ G = nx.read_edgelist(
 # -------------------------
 # Comunidades con Infomap
 # -------------------------
-im = Infmap()
-
 for u, v in G.edges():
     im.add_link(int(u), int(v))
 
@@ -83,3 +86,14 @@ print("Clustering medio C:", C)
 print("Transitividad T:", T)
 print("Assortatividad r:", r)
 print("Modularidad Q:", Q)
+
+ruta_txt = os.path.join(output_dir, "metricas.txt")
+
+with open(ruta_txt, "w") as f:
+    f.write(f"L = {L}\n")
+    f.write(f"C = {C}\n")
+    f.write(f"T = {T}\n")
+    f.write(f"r = {r}\n")
+    f.write(f"Q = {Q}\n")
+
+print("Resultados guardados en:", ruta_txt)
