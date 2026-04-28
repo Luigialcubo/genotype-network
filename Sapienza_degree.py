@@ -1,7 +1,7 @@
 import networkx as net
 import matplotlib.pyplot as plt
 import numpy as np
-import  infomap as Infmap
+import infomap as Infmap
 
 
 archivo = "BWetal2022_2LCC.edge"
@@ -31,3 +31,11 @@ plt.xscale("log")
 plt.tight_layout()
 plt.savefig("figura_2b_distribucion_grado.png", dpi=300)
 plt.show()
+
+# Cada nodo es un genotipo de H3N2 y Cada enlace indica que dos genotipos difieren 
+# por una mutación.
+# Las comunidades detectadas por Infomap representan regiones del espacio genético
+# donde el virus puede moverse fácilmente. 
+# En el contexto del paper, estas comunidades son importantes porque pueden comportarse 
+# como grupos de variantes capaces de sostener brotes o cambios de predominancia epidémica.
+

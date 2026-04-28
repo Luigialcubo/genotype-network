@@ -93,3 +93,4 @@ if __name__ == "__main__":
                     "Retícula 2D de 10x10 nodos", con_etiquetas=False)
     exportar_txt(red_lattice, "reticula_10x10.txt")
 
+
