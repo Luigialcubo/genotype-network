@@ -33,5 +33,10 @@ typedef struct SIMS
 double derivada_sis(double rho, ParametrosSIS p);
 double paso_rk4(double rho_actual, ParametrosSIS p);
 
+// Funcones rk4_sims.c
+void derivada(double rho[],double mu[],double X[][n],double A[][n],ParametrosSIMS p,double drho[],double dmu[]);
+void paso_rk4_sims(double rho[],double mu[],double X[][n],double A[][n],ParametrosSIMS p);
+
+
 //Funciones main.c
 void simulacion(double beta_inicio, double beta_final, double incremento);

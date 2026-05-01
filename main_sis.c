@@ -2,25 +2,26 @@
 
 int main(){
     ParametrosSIS parametros;
-    parametros.mu = 0.1;
-
-    double beta = 0.0;
-
-    double rho, rho_viejo, diff;
-    double t;
+    double beta,rho,rho_viejo,diff,t;
     int iter;
+    parametros.mu= 0.1;
 
     FILE *archivo;
     FILE *archivo2;
+
     archivo = fopen(resultados_beta, "w");
     archivo2 = fopen(rho_tiempo, "w");
+
     if (archivo == NULL || archivo2 == NULL) {
         printf("Error: No se pudo abrir el archivo.\n");
         return 1; 
     }
 
+
     fprintf(archivo, "beta\trho_estacionario\n");
     fprintf(archivo2, "tiempo\trho\n");
+    
+
 
     for(beta; beta <= 1; beta += 0.01){
         parametros.beta = beta;
