@@ -5,16 +5,29 @@
 #define dT 0.01
 #define Tolerance 1e-8
 #define MAX_ITER 1000000
+#define n 20
 
 #define resultados_beta "resultados/datos_sis.txt"
 #define rho_tiempo "resultados/rho_tiempo.txt"
 
-// Parametro sistenma SIS
+// Parametros sistenma SIS
 typedef struct SIS
 {
     double beta; //Tasa transmision o infectividad
     double mu; //Tasa recuperacion (mu_0 = 0.1)
 } ParametrosSIS;
+
+// Parametros sistema SIMS
+typedef struct SIMS
+{
+    double beta; //Tasa transmision o infectividad
+    double mu_0; //Tasa recuperacion basal
+    double Dx; // Tasa de mutacion 
+    double alfa; // Tasa de inmunidad adquirida 
+    double delta; // longitud de inmunidad cruzada característica 
+    double gamma; // Tasa de disminucion de la inmunidad
+    
+} ParametrosSIMS;
 
 //Funciones rk4_sis.c
 double derivada_sis(double rho, ParametrosSIS p);
