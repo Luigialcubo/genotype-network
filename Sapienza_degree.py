@@ -6,8 +6,8 @@ import numpy as np
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_FILE = BASE_DIR / "BWetal2022_2LCC.edge"
-PLOTS_DIR = BASE_DIR / "plots"
-RESULTS_DIR = BASE_DIR / "results"
+PLOTS_DIR = BASE_DIR / "plots"/"H3N2"
+RESULTS_DIR = BASE_DIR / "results"/"H3N2_txt"
 
 PLOTS_DIR.mkdir(exist_ok=True)
 RESULTS_DIR.mkdir(exist_ok=True)

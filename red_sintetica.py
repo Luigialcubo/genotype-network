@@ -3,12 +3,13 @@ import sys
 import networkx as nx
 import matplotlib.pyplot as plt
 
+
 #Directorios 
 carpeta_plots = "plots"
 if not os.path.exists(carpeta_plots):
     os.makedirs(carpeta_plots)
 
-carpeta_redes = "plots/redes_txt"
+carpeta_redes = "results/redes_txt"
 if not os.path.exists(carpeta_redes):
     os.makedirs(carpeta_redes)
 
