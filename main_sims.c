@@ -9,7 +9,7 @@ int main(){
     pa_sis.mu_0=pa_sir.mu_0=pa_sirs.mu_0 =pa_simsb.mu_0= 0.1;
     pa_sis.beta=pa_sir.beta=pa_sirs.beta =pa_simsb.beta =0.3;
     pa_sis.Dx=pa_sir.Dx=pa_sirs.Dx = 0.0;
-    pa_simsb.Dx=1e-5;
+    pa_simsb.Dx=1.0e-5;
     pa_sis.delta=pa_sir.delta=pa_sirs.delta =pa_simsb.delta= 0.0;
     pa_sis.alfa =pa_sis.gamma=pa_sir.gamma=pa_simsb.gamma= 0.0;
     pa_sir.alfa=pa_sirs.alfa=pa_simsb.alfa=0.03;

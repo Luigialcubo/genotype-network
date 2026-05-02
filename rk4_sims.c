@@ -5,7 +5,6 @@ void derivada(double rho[],double mu[],double X[][n],double A[][n],ParametrosSIM
     double S,mutacion,lij,k[p.N],inmunidad,cruzada;
     int i,j;
     S=1.0;
-    mutacion=lij=inmunidad=cruzada=0.0;
 
     // Obtengo el número de susceptibles 
     for(i=0;i<p.N;i++){
@@ -23,14 +22,16 @@ void derivada(double rho[],double mu[],double X[][n],double A[][n],ParametrosSIM
     }
     // calculo la derivada de rho y de mu
     for(i=0;i<p.N;i++){
+        mutacion=inmunidad=0;
         for(j=0;j<p.N;j++){
+            lij=0;
             if(i==j){
                 lij=1.0;
             }
-            if(k[i]>0){
-                lij=lij-A[i][j]/k[i];
+            if(k[j]>0){
+                lij=lij-A[i][j]/k[j];
             }
-            
+
             if(p.delta==0){
                 if(i==j){
                     cruzada=1;
