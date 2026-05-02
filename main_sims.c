@@ -1,37 +1,40 @@
 #include "definiciones.h"
 int main(){
-    ParametrosSIMS pa_sis,pa_sir,pa_sirs,pa_simsb;
-    double iter_sis,iter_sir,iter_sirs,iter_simsb,diff,t_sis,t_sir,t_sirs,t_simsb,I_sis,I_sir,I_sirs,I_simsb,I_viejo;
+    ParametrosSIMS pa_sis,pa_sir,pa_sirs,pa_simsb,pa_simsc;
+    double iter_sis,iter_sir,iter_sirs,iter_simsb,iter_simsc,diff,t_sis,t_sir,t_sirs,t_simsb,t_simsc,I_simsb,I_simsc,I_viejo;
     double A[n][n],X[n][n];
     double rho_sis[n],mu_sis[n],rho_sir[n],mu_sir[n],rho_sirs[n],mu_sirs[n];
-    double rho_simsb[n],mu_simsb[n];
+    double rho_simsb[n],mu_simsb[n],rho_simsc[n],mu_simsc[n];
     int i,j;
-    pa_sis.mu_0=pa_sir.mu_0=pa_sirs.mu_0 =pa_simsb.mu_0= 0.1;
-    pa_sis.beta=pa_sir.beta=pa_sirs.beta =pa_simsb.beta =0.3;
+    pa_sis.mu_0=pa_sir.mu_0=pa_sirs.mu_0 =pa_simsb.mu_0=pa_simsc.mu_0= 0.1;
+    pa_sis.beta=pa_sir.beta=pa_sirs.beta =pa_simsb.beta =pa_simsc.beta=0.3;
     pa_sis.Dx=pa_sir.Dx=pa_sirs.Dx = 0.0;
-    pa_simsb.Dx=1.0e-5;
+    pa_simsb.Dx=pa_simsc.Dx=1.0e-5;
     pa_sis.delta=pa_sir.delta=pa_sirs.delta =pa_simsb.delta= 0.0;
-    pa_sis.alfa =pa_sis.gamma=pa_sir.gamma=pa_simsb.gamma= 0.0;
-    pa_sir.alfa=pa_sirs.alfa=pa_simsb.alfa=0.03;
+    pa_simsc.delta=3;
+    pa_sis.alfa =pa_sis.gamma=pa_sir.gamma=pa_simsb.gamma=pa_simsc.gamma= 0.0;
+    pa_sir.alfa=pa_sirs.alfa=pa_simsb.alfa=pa_simsc.alfa=0.03;
     pa_sirs.gamma = 0.02;
     pa_sis.N=pa_sir.N=pa_sirs.N=1;
-    pa_simsb.N=n;
-    t_sis=t_sir=t_sirs=t_simsb = 0;
-    iter_sis=iter_sir=iter_sirs=iter_simsb=0;
+    pa_simsb.N=pa_simsc.N=n;
+    t_sis=t_sir=t_sirs=t_simsb =t_simsc= 0;
+    iter_sis=iter_sir=iter_sirs=iter_simsb=iter_simsc=0;
 
 
     FILE *archivo_sis;
     FILE *archivo_sir;
     FILE *archivo_sirs;
     FILE *archivo_simsb;
+    FILE *archivo_simsc;
 
     archivo_sis = fopen("results/fig1_1/datos_sis.txt", "w");
     archivo_sir=fopen("results/fig1_1/datos_sir.txt", "w");
     archivo_sirs=fopen("results/fig1_1/datos_sirs.txt", "w");
     archivo_simsb=fopen("results/fig1_1/datos_simsb.txt", "w");
+    archivo_simsc=fopen("results/fig1_1/datos_simsc.txt", "w");
 
 
-    if (archivo_sis == NULL || archivo_sir == NULL || archivo_sirs == NULL || archivo_simsb == NULL) {
+    if (archivo_sis == NULL || archivo_sir == NULL || archivo_sirs == NULL || archivo_simsb == NULL || archivo_simsc == NULL) {
         printf("Error: No se pudo abrir el archivo.\n");
         return 1; 
     }
@@ -45,17 +48,26 @@ int main(){
     }
     fprintf(archivo_simsb, "\n");
 
+    fprintf(archivo_simsc, "tiempo\t");
+    for(i=0;i<n;i++){
+        fprintf(archivo_simsc, "rho(%d)\t",i+1);
+    }
+    fprintf(archivo_simsc, "\n");
+
 
     // Definimos las condiciones iniciales
 
     for(i=0;i<n;i++){
         rho_simsb[i]=0;
         mu_simsb[i]=pa_simsb.mu_0;
+        rho_simsc[i]=0;
+        mu_simsc[i]=pa_simsc.mu_0;
+
     }
 
-    rho_sis[0]=rho_sir[0]=rho_sirs[0]=rho_simsb[0]=0.01;
+    rho_sis[0]=rho_sir[0]=rho_sirs[0]=rho_simsb[0]=rho_simsc[0]=0.01;
     mu_sis[0]=mu_sir[0]=mu_sirs[0]=pa_sis.mu_0;
-    I_sis=I_sir=I_sirs=I_simsb=0.01;
+    I_simsb=I_simsc=0.01;
 
     // Defino la red lineal de genotipos
     // Primero obtenemos la matriz de adyacencia
@@ -79,37 +91,34 @@ int main(){
 
     
     // Hacemos el bucle en el que calculamos I(t) hasta alcanzar un estado estacionario
+
+    // SIS(1.1.a)
     do{
-        fprintf(archivo_sis, "%f\t%f\n", t_sis, I_sis);
-        I_viejo = I_sis;
+        fprintf(archivo_sis, "%f\t%f\n", t_sis, rho_sis[0]);
         paso_rk4_sims(rho_sis,mu_sis,X,A,pa_sis);
-        I_sis=rho_sis[0];
         t_sis += dT;
-        diff = fabs(I_sis - I_viejo);
         iter_sis++;
-    } while (diff > Tolerance2 && iter_sis < MAX_ITER);
+    } while (iter_sis < (200/dT));
 
+
+    // SIR(1.1.a)
     do{
-        fprintf(archivo_sir, "%f\t%f\n", t_sir, I_sir);
-        I_viejo = I_sir;
+        fprintf(archivo_sir, "%f\t%f\n", t_sir, rho_sir[0]);
         paso_rk4_sims(rho_sir,mu_sir,X,A,pa_sir);
-        I_sir=rho_sir[0];
         t_sir += dT;
-        diff = fabs(I_sir - I_viejo);
         iter_sir++;
-    } while (diff > Tolerance2 && iter_sir < MAX_ITER);
+    } while (iter_sir < (200/dT));
 
+    //SIRS(1.1.a)
     do{
-        fprintf(archivo_sirs, "%f\t%f\n", t_sirs, I_sirs);
-        I_viejo = I_sirs;
-        I_sirs=0;
+        fprintf(archivo_sirs, "%f\t%f\n", t_sirs, rho_sirs[0]);
         paso_rk4_sims(rho_sirs,mu_sirs,X,A,pa_sirs);
-        I_sirs=rho_sirs[0];
         t_sirs += dT;
-        diff = fabs(I_sirs - I_viejo);
         iter_sirs++;
-    } while (diff > Tolerance2 && iter_sirs < MAX_ITER);
+    } while (iter_sirs < (200/dT));
 
+
+    // SIMS sin inmunidad cruzada(1.1.b)
     do{
         fprintf(archivo_simsb, "%f\t", t_simsb);
         for(i=0;i<n;i++){
@@ -127,11 +136,30 @@ int main(){
         iter_simsb++;
     } while (iter_simsb < (1000/dT));
 
+    // SIMS con inmunidad cruzada (1.1.c)
+    do{
+        fprintf(archivo_simsc, "%f\t", t_simsc);
+        for(i=0;i<n;i++){
+            fprintf(archivo_simsc, "%f\t", rho_simsc[i]);
+        }
+        fprintf(archivo_simsc, "\n");
+        I_viejo = I_simsc;
+        I_simsc=0;
+        paso_rk4_sims(rho_simsc,mu_simsc,X,A,pa_simsc);
+        for(i=0;i<n;i++){
+            I_simsc+=rho_simsc[i];
+        }
+        t_simsc += dT;
+        //diff = fabs(I_simsb - I_viejo);
+        iter_simsc++;
+    } while (iter_simsc < (1000/dT));
+
 
     fclose(archivo_sis);
     fclose(archivo_sir);
     fclose(archivo_sirs);
     fclose(archivo_simsb);
+    fclose(archivo_simsc);
 
     return 0;
 };
