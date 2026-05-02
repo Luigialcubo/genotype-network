@@ -30,6 +30,7 @@ void derivada(double rho[],double mu[],double X[][n],double A[][n],ParametrosSIM
             if(k[i]>0){
                 lij=lij-A[i][j]/k[i];
             }
+            
             if(p.delta==0){
                 if(i==j){
                     cruzada=1;
@@ -41,6 +42,7 @@ void derivada(double rho[],double mu[],double X[][n],double A[][n],ParametrosSIM
             else{
                 cruzada=exp(-X[i][j]/p.delta);
             }
+            
             mutacion+=rho[j]*lij;
             inmunidad+=rho[j]*cruzada;
 
