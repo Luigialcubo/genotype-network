@@ -4,6 +4,7 @@
 #include <time.h>
 #define dT 0.01
 #define Tolerance 1e-8
+#define Tolerance2 1e-18
 #define MAX_ITER 1000000
 #define n 20
 
@@ -26,6 +27,7 @@ typedef struct SIMS
     double alfa; // Tasa de inmunidad adquirida 
     double delta; // longitud de inmunidad cruzada característica 
     double gamma; // Tasa de disminucion de la inmunidad
+    int N; // Numero de cepas 
     
 } ParametrosSIMS;
 
