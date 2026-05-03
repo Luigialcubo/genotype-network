@@ -1,7 +1,7 @@
 #include "definiciones.h"
 int main(){
     ParametrosSIMS pa_sis,pa_sir,pa_sirs,pa_simsb,pa_simsc;
-    double iter_sis,iter_sir,iter_sirs,iter_simsb,iter_simsc,diff,t_sis,t_sir,t_sirs,t_simsb,t_simsc,I_simsb,I_simsc,I_viejo,R_efectivob,R_efectivoc;
+    double iter_sis,iter_sir,iter_sirs,iter_simsb,iter_simsc,diff,t_sis,t_sir,t_sirs,t_simsb,t_simsc,I_simsb,I_simsc,R_efectivob,R_efectivoc;
     double A[n][n],X[n][n];
     double rho_sis[n],mu_sis[n],rho_sir[n],mu_sir[n],rho_sirs[n],mu_sirs[n];
     double rho_simsb[n],mu_simsb[n],rho_simsc[n],mu_simsc[n];
@@ -48,7 +48,7 @@ int main(){
     fprintf(archivo_sirs, "tiempo\tI(t)\n");
     fprintf(archivo_simsb, "tiempo\t");
     fprintf(archivo_R_efectb, "tb\tRb\n");
-    fprintf(archivo_R_efectc, "tb\tRb\n");
+    fprintf(archivo_R_efectc, "tb\tRc\n");
 
     for(i=0;i<n;i++){
         fprintf(archivo_simsb, "rho(%d)\t",i+1);
@@ -136,14 +136,12 @@ int main(){
         fprintf(archivo_simsb, "\n");
         fprintf(archivo_R_efectb, "\n");
 
-        I_viejo = I_simsb;
         I_simsb=0;
         paso_rk4_sims(rho_simsb,mu_simsb,X,A,pa_simsb);
         for(i=0;i<n;i++){
             I_simsb+=rho_simsb[i];
         }
         t_simsb += dT;
-        //diff = fabs(I_simsb - I_viejo);
         iter_simsb++;
     } while (iter_simsb < (1000/dT));
 
@@ -154,17 +152,16 @@ int main(){
         for(i=0;i<n;i++){
             fprintf(archivo_simsc, "%f\t", rho_simsc[i]);
         }
+
         fprintf(archivo_R_efectc, "%f\t%f", t_simsc,R_efectivoc);
         fprintf(archivo_simsc, "\n");
         fprintf(archivo_R_efectc, "\n");
-        I_viejo = I_simsc;
         I_simsc=0;
         paso_rk4_sims(rho_simsc,mu_simsc,X,A,pa_simsc);
         for(i=0;i<n;i++){
             I_simsc+=rho_simsc[i];
         }
         t_simsc += dT;
-        //diff = fabs(I_simsb - I_viejo);
         iter_simsc++;
     } while (iter_simsc < (1000/dT));
 

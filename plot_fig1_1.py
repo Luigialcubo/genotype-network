@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import art3d
 from matplotlib.colors import LinearSegmentedColormap
+
 ##Plot de la figura 1.1.a
 sis = np.loadtxt("results/fig1_1/datos_sis.txt", skiprows=1)
 sir = np.loadtxt("results/fig1_1/datos_sir.txt", skiprows=1)
@@ -57,7 +58,7 @@ plt.savefig(
 data = np.loadtxt("results/fig1_1/datos_simsb.txt", skiprows=1)
 
 t = data[:, 0]
-rho = data[:, 1:]   # columnas de cepas
+rho = data[:, 1:]   
 
 n = rho.shape[1]
 
@@ -93,7 +94,7 @@ ax.set_zlim(0, 0.6)
 
 ax.view_init(elev=20, azim=-65)
 
-plt.title("Dinámica temporal del modelo SIMS para cada cepa sin considerar inmunidad cruzada", fontsize=18)
+plt.title("Dinámica temporal del modelo SIMS sin inmunidad cruzada", fontsize=18)
 
 plt.tight_layout()
 plt.savefig("plots/fig1_1/fig1_1_b.png", dpi=300, bbox_inches="tight")
@@ -103,7 +104,7 @@ plt.savefig("plots/fig1_1/fig1_1_b.png", dpi=300, bbox_inches="tight")
 data = np.loadtxt("results/fig1_1/datos_simsc.txt", skiprows=1)
 
 t = data[:, 0]
-rho = data[:, 1:]   # columnas de cepas
+rho = data[:, 1:]   
 
 n = rho.shape[1]
 
@@ -139,7 +140,7 @@ ax.set_zlim(0, 0.6)
 
 ax.view_init(elev=20, azim=-65)
 
-plt.title("Dinámica temporal del modelo SIMS para cada cepa sin considerar inmunidad cruzada", fontsize=18)
+plt.title("Dinámica temporal del modelo SIMS considerando inmunidad cruzada", fontsize=18)
 
 plt.tight_layout()
 plt.savefig("plots/fig1_1/fig1_1_c.png", dpi=300, bbox_inches="tight")
@@ -147,23 +148,22 @@ plt.savefig("plots/fig1_1/fig1_1_c.png", dpi=300, bbox_inches="tight")
 
 ## Gráfica auxiliar(Fig1.1.b)
 
-
 rho_data = np.loadtxt("results/fig1_1/datos_simsb.txt", skiprows=1)
 reff_data = np.loadtxt("results/fig1_1/datos_Refectb.txt", skiprows=1)
 
 t = rho_data[:, 0]
-rho = rho_data[:, 1:]      # o [:,2:] si también guardaste I(t)
+rho = rho_data[:, 1:]     
 
 t_reff = reff_data[:, 0]
 reff = reff_data[:, 1]
 
-cepa = 10
-rho_cepa = rho[:, cepa]
+rho_cepa = rho[:, 10]
 
 fig, ax1 = plt.subplots(figsize=(4,3))
 
 # rho
 ax1.plot(t, rho_cepa, color="#8B2E2E", lw=3)
+ax.set_xlabel(r"$t$", fontsize=18)
 ax1.set_ylabel(r"$\rho_{10}$", color="#8B2E2E", fontsize=20)
 ax1.tick_params(axis="y", colors="#8B2E2E", labelsize=16)
 ax1.set_ylim(0, 0.3)
@@ -182,20 +182,53 @@ ax2.tick_params(axis="y", colors="gray", labelsize=16)
 ax2.set_ylim(0, 4)
 
 # eje x REAL
-ax1.set_xlim(t.min(), t.max())
+ax1.set_xlim(400, 700)
 
-# si quieres ticks automáticos:
-# nada más
-
-# si quieres pocos ticks:
-
-
-
-xmin = int(np.floor(t.min()))
-xmax = int(np.ceil(t.max()))
-
-ax1.set_xticks(np.arange(xmin, xmax + 1, 1))
 
 
 plt.tight_layout()
-plt.show()
+plt.savefig("plots/fig1_1/fig1_1b_aux.png", dpi=300, bbox_inches="tight")
+
+
+## Gráfica auxiliar(Fig1.1.c)
+
+rho_data = np.loadtxt("results/fig1_1/datos_simsc.txt", skiprows=1)
+reff_data = np.loadtxt("results/fig1_1/datos_Refectc.txt", skiprows=1)
+
+t = rho_data[:, 0]
+rho = rho_data[:, 1:]     
+
+t_reff = reff_data[:, 0]
+reff = reff_data[:, 1]
+
+rho_cepa = rho[:, 10]
+
+fig, ax1 = plt.subplots(figsize=(4,3))
+
+# rho
+ax1.plot(t, rho_cepa, color="#8B2E2E", lw=3)
+ax.set_xlabel(r"$t$", fontsize=18)
+ax1.set_ylabel(r"$\rho_{10}$", color="#8B2E2E", fontsize=20)
+ax1.tick_params(axis="y", colors="#8B2E2E", labelsize=16)
+ax1.set_ylim(0, 0.3)
+
+# Reff
+ax2 = ax1.twinx()
+ax2.plot(t_reff, reff, color="gray", lw=3)
+ax2.set_ylabel(
+    r"$R^{eff}_{10}$",
+    color="gray",
+    fontsize=20,
+    rotation=0,
+    labelpad=25
+)
+ax2.tick_params(axis="y", colors="gray", labelsize=16)
+ax2.set_ylim(0, 4)
+
+# eje x REAL
+ax1.set_xlim(500, 700)
+
+
+
+plt.tight_layout()
+plt.savefig("plots/fig1_1/fig1_1c_aux.png", dpi=300, bbox_inches="tight")

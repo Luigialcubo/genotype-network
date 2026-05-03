@@ -14,25 +14,19 @@
  *   gcc -o sims_general main_sims_general.c rk4_sims_general.c -lm
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <string.h>
+
 #include "definiciones.h"
 
-/* Prototipos de las funciones genéricas */
-void derivada_general(double rho[], double mu[], double **X, double **A,
-              ParametrosSIMS p, double drho[], double dmu[]);
-void paso_rk4_sims_general(double rho[], double mu[], double **X, double **A,
-                   ParametrosSIMS p);
 
 /* ------------------------------------------------------------
  * Lee una red desde archivo (formato: N, luego aristas i j)
  * y construye las matrices de adyacencia A y distancias X.
  * ------------------------------------------------------------ */
 int leer_red_dinamica(const char *nombre, double ***A_out, double ***X_out) {
-    FILE *f = fopen(nombre, "r");
-    if (!f) {
+    FILE *f ;
+
+    f= fopen(nombre, "r");
+    if (f==NULL) {
         printf("Error: no se pudo abrir %s\n", nombre);
         exit(1);
     }

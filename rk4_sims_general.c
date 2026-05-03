@@ -1,5 +1,5 @@
 #include "definiciones.h"   // Para tener ParametrosSIMS, dT, etc.
-#include <math.h>           // exp, fabs (si se usan)
+
 
 /*
  * Función derivada – versión genérica (acepta cualquier número de cepas)

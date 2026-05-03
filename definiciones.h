@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <string.h>
 #define dT 0.01
 #define Tolerance 1e-8
 #define Tolerance2 1e-18
@@ -39,6 +40,9 @@ double paso_rk4(double rho_actual, ParametrosSIS p);
 void derivada(double rho[],double mu[],double X[][n],double A[][n],ParametrosSIMS p,double drho[],double dmu[]);
 void paso_rk4_sims(double rho[],double mu[],double X[][n],double A[][n],ParametrosSIMS p);
 
+// Funcones rk4_sims_general.c
+void derivada_general(double rho[], double mu[], double **X, double **A,ParametrosSIMS p, double drho[], double dmu[]);
+void paso_rk4_sims_general(double rho[], double mu[], double **X, double **A,ParametrosSIMS p);
 
 //Funciones main.c
 void simulacion(double beta_inicio, double beta_final, double incremento);
