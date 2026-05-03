@@ -148,7 +148,7 @@ int main() {
                     etiquetas[r], gamma_str[g]);
 
             printf("   gamma=%.2f -> %s\n", gammas[g], archivo_salida);
-            simular_fig3(N, A, X, gammas[g], archivo_salida, 1000.0);
+            simular_fig3(N, A, X, gammas[g], archivo_salida, 2000.0);
         }
         liberar_matriz_dinamica(A, N);
         liberar_matriz_dinamica(X, N);
