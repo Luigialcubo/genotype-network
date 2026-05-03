@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import art3d
 from matplotlib.colors import LinearSegmentedColormap
-
 ##Plot de la figura 1.1.a
 sis = np.loadtxt("results/fig1_1/datos_sis.txt", skiprows=1)
 sir = np.loadtxt("results/fig1_1/datos_sir.txt", skiprows=1)
@@ -145,3 +144,58 @@ plt.title("Dinámica temporal del modelo SIMS para cada cepa sin considerar inmu
 plt.tight_layout()
 plt.savefig("plots/fig1_1/fig1_1_c.png", dpi=300, bbox_inches="tight")
 
+
+## Gráfica auxiliar(Fig1.1.b)
+
+
+rho_data = np.loadtxt("results/fig1_1/datos_simsb.txt", skiprows=1)
+reff_data = np.loadtxt("results/fig1_1/datos_Refectb.txt", skiprows=1)
+
+t = rho_data[:, 0]
+rho = rho_data[:, 1:]      # o [:,2:] si también guardaste I(t)
+
+t_reff = reff_data[:, 0]
+reff = reff_data[:, 1]
+
+cepa = 10
+rho_cepa = rho[:, cepa]
+
+fig, ax1 = plt.subplots(figsize=(4,3))
+
+# rho
+ax1.plot(t, rho_cepa, color="#8B2E2E", lw=3)
+ax1.set_ylabel(r"$\rho_{10}$", color="#8B2E2E", fontsize=20)
+ax1.tick_params(axis="y", colors="#8B2E2E", labelsize=16)
+ax1.set_ylim(0, 0.3)
+
+# Reff
+ax2 = ax1.twinx()
+ax2.plot(t_reff, reff, color="gray", lw=3)
+ax2.set_ylabel(
+    r"$R^{eff}_{10}$",
+    color="gray",
+    fontsize=20,
+    rotation=0,
+    labelpad=25
+)
+ax2.tick_params(axis="y", colors="gray", labelsize=16)
+ax2.set_ylim(0, 4)
+
+# eje x REAL
+ax1.set_xlim(t.min(), t.max())
+
+# si quieres ticks automáticos:
+# nada más
+
+# si quieres pocos ticks:
+
+
+
+xmin = int(np.floor(t.min()))
+xmax = int(np.ceil(t.max()))
+
+ax1.set_xticks(np.arange(xmin, xmax + 1, 1))
+
+
+plt.tight_layout()
+plt.show()

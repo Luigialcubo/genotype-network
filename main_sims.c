@@ -1,7 +1,7 @@
 #include "definiciones.h"
 int main(){
     ParametrosSIMS pa_sis,pa_sir,pa_sirs,pa_simsb,pa_simsc;
-    double iter_sis,iter_sir,iter_sirs,iter_simsb,iter_simsc,diff,t_sis,t_sir,t_sirs,t_simsb,t_simsc,I_simsb,I_simsc,I_viejo;
+    double iter_sis,iter_sir,iter_sirs,iter_simsb,iter_simsc,diff,t_sis,t_sir,t_sirs,t_simsb,t_simsc,I_simsb,I_simsc,I_viejo,R_efectivob,R_efectivoc;
     double A[n][n],X[n][n];
     double rho_sis[n],mu_sis[n],rho_sir[n],mu_sir[n],rho_sirs[n],mu_sirs[n];
     double rho_simsb[n],mu_simsb[n],rho_simsc[n],mu_simsc[n];
@@ -26,15 +26,19 @@ int main(){
     FILE *archivo_sirs;
     FILE *archivo_simsb;
     FILE *archivo_simsc;
+    FILE *archivo_R_efectb;
+    FILE *archivo_R_efectc;
 
     archivo_sis = fopen("results/fig1_1/datos_sis.txt", "w");
     archivo_sir=fopen("results/fig1_1/datos_sir.txt", "w");
     archivo_sirs=fopen("results/fig1_1/datos_sirs.txt", "w");
     archivo_simsb=fopen("results/fig1_1/datos_simsb.txt", "w");
     archivo_simsc=fopen("results/fig1_1/datos_simsc.txt", "w");
+    archivo_R_efectb=fopen("results/fig1_1/datos_Refectb.txt", "w");
+    archivo_R_efectc=fopen("results/fig1_1/datos_Refectc.txt", "w");
 
 
-    if (archivo_sis == NULL || archivo_sir == NULL || archivo_sirs == NULL || archivo_simsb == NULL || archivo_simsc == NULL) {
+    if (archivo_sis == NULL || archivo_sir == NULL || archivo_sirs == NULL || archivo_simsb == NULL || archivo_simsc == NULL || archivo_R_efectb == NULL || archivo_R_efectc == NULL) {
         printf("Error: No se pudo abrir el archivo.\n");
         return 1; 
     }
@@ -43,6 +47,9 @@ int main(){
     fprintf(archivo_sir, "tiempo\tI(t)\n");
     fprintf(archivo_sirs, "tiempo\tI(t)\n");
     fprintf(archivo_simsb, "tiempo\t");
+    fprintf(archivo_R_efectb, "tb\tRb\n");
+    fprintf(archivo_R_efectc, "tb\tRb\n");
+
     for(i=0;i<n;i++){
         fprintf(archivo_simsb, "rho(%d)\t",i+1);
     }
@@ -120,11 +127,15 @@ int main(){
 
     // SIMS sin inmunidad cruzada(1.1.b)
     do{
+        R_efectivob=pa_simsb.beta*(1-I_simsb)/mu_simsb[9];
         fprintf(archivo_simsb, "%f\t", t_simsb);
         for(i=0;i<n;i++){
             fprintf(archivo_simsb, "%f\t", rho_simsb[i]);
         }
+        fprintf(archivo_R_efectb, "%f\t%f",t_simsb,R_efectivob);
         fprintf(archivo_simsb, "\n");
+        fprintf(archivo_R_efectb, "\n");
+
         I_viejo = I_simsb;
         I_simsb=0;
         paso_rk4_sims(rho_simsb,mu_simsb,X,A,pa_simsb);
@@ -138,11 +149,14 @@ int main(){
 
     // SIMS con inmunidad cruzada (1.1.c)
     do{
+        R_efectivoc=pa_simsc.beta*(1-I_simsc)/mu_simsc[9];
         fprintf(archivo_simsc, "%f\t", t_simsc);
         for(i=0;i<n;i++){
             fprintf(archivo_simsc, "%f\t", rho_simsc[i]);
         }
+        fprintf(archivo_R_efectc, "%f\t%f", t_simsc,R_efectivoc);
         fprintf(archivo_simsc, "\n");
+        fprintf(archivo_R_efectc, "\n");
         I_viejo = I_simsc;
         I_simsc=0;
         paso_rk4_sims(rho_simsc,mu_simsc,X,A,pa_simsc);
