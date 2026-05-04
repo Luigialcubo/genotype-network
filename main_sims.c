@@ -2,10 +2,14 @@
 int main(){
     ParametrosSIMS pa_sis,pa_sir,pa_sirs,pa_simsb,pa_simsc;
     double iter_sis,iter_sir,iter_sirs,iter_simsb,iter_simsc,diff,t_sis,t_sir,t_sirs,t_simsb,t_simsc,I_simsb,I_simsc,R_efectivob,R_efectivoc;
+
     double A[n][n],X[n][n];
+    double A_uni[n*n], X_uni[n*n];
+
     double rho_sis[n],mu_sis[n],rho_sir[n],mu_sir[n],rho_sirs[n],mu_sirs[n];
     double rho_simsb[n],mu_simsb[n],rho_simsc[n],mu_simsc[n];
     int i,j;
+
     pa_sis.mu_0=pa_sir.mu_0=pa_sirs.mu_0 =pa_simsb.mu_0=pa_simsc.mu_0= 0.1;
     pa_sis.beta=pa_sir.beta=pa_sirs.beta =pa_simsb.beta =pa_simsc.beta=0.3;
     pa_sis.Dx=pa_sir.Dx=pa_sirs.Dx = 0.0;
@@ -77,6 +81,7 @@ int main(){
     I_simsb=I_simsc=0.01;
 
     // Defino la red lineal de genotipos
+    /*
     // Primero obtenemos la matriz de adyacencia
     for (i = 0; i < n; i++) {
         for(j=0;j<n;j++){
@@ -86,13 +91,39 @@ int main(){
     for (int i = 0; i < (n - 1); i++) {
         A[i][i + 1] = 1.0;
         A[i + 1][i] = 1.0;
-    } 
+    } */
 
+    // Primero obtenemos la matriz de adyacencia
+    for(i=0; i<(n*n); i++){
+        A_uni[i] = 0;
+    }
+    //Parte derecha diagonal
+    for (i=n; i<(n*n); i = i+n){
+        A_uni[i + i/n - 1] = 1.0;
+    }
+    //Parte izquierda diagonal
+    for (i=0; i<(n*n)-n; i = i+n){
+        if (i>0){
+            A_uni[i + i/n +1] = 1.0;
+        } else {
+            A_uni[i+1] = 1.0;
+        }
+    }
+    
+    /*
     // Luego obtenemos la matriz de distancias
 
     for (i = 0; i < n; i++) {
         for (j = 0; j < n; j++) {
             X[i][j] = abs(i - j);
+        }
+    }*/
+
+    // Luego obtenemos la matriz de distancias
+
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n; j++) {
+            X_uni[i*n + j] = abs(i - j);
         }
     }
 
@@ -102,7 +133,7 @@ int main(){
     // SIS(1.1.a)
     do{
         fprintf(archivo_sis, "%f\t%f\n", t_sis, rho_sis[0]);
-        paso_rk4_sims(rho_sis,mu_sis,X,A,pa_sis);
+        paso_rk4_sims(rho_sis,mu_sis,X_uni,A_uni,pa_sis);
         t_sis += dT;
         iter_sis++;
     } while (iter_sis < (200/dT));
@@ -111,7 +142,7 @@ int main(){
     // SIR(1.1.a)
     do{
         fprintf(archivo_sir, "%f\t%f\n", t_sir, rho_sir[0]);
-        paso_rk4_sims(rho_sir,mu_sir,X,A,pa_sir);
+        paso_rk4_sims(rho_sir,mu_sir,X_uni,A_uni,pa_sir);
         t_sir += dT;
         iter_sir++;
     } while (iter_sir < (200/dT));
@@ -119,7 +150,7 @@ int main(){
     //SIRS(1.1.a)
     do{
         fprintf(archivo_sirs, "%f\t%f\n", t_sirs, rho_sirs[0]);
-        paso_rk4_sims(rho_sirs,mu_sirs,X,A,pa_sirs);
+        paso_rk4_sims(rho_sirs,mu_sirs,X_uni,A_uni,pa_sirs);
         t_sirs += dT;
         iter_sirs++;
     } while (iter_sirs < (200/dT));
@@ -137,7 +168,7 @@ int main(){
         fprintf(archivo_R_efectb, "\n");
 
         I_simsb=0;
-        paso_rk4_sims(rho_simsb,mu_simsb,X,A,pa_simsb);
+        paso_rk4_sims(rho_simsb,mu_simsb,X_uni,A_uni,pa_simsb);
         for(i=0;i<n;i++){
             I_simsb+=rho_simsb[i];
         }
@@ -157,7 +188,7 @@ int main(){
         fprintf(archivo_simsc, "\n");
         fprintf(archivo_R_efectc, "\n");
         I_simsc=0;
-        paso_rk4_sims(rho_simsc,mu_simsc,X,A,pa_simsc);
+        paso_rk4_sims(rho_simsc,mu_simsc,X_uni,A_uni,pa_simsc);
         for(i=0;i<n;i++){
             I_simsc+=rho_simsc[i];
         }
