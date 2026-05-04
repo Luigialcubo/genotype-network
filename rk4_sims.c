@@ -1,7 +1,7 @@
 #include "definiciones.h"
 
 //Esta funcion se encarga de hacer la derivada de rho_i  y mu_i en funcion del tiempo para calcular las k
-void derivada(double rho[],double mu[],double X_uni[n*n],double A_uni[n*n],ParametrosSIMS p,double drho[],double dmu[]){
+void derivada(double rho[],double mu[],double X_uni[],double A_uni[],ParametrosSIMS p,double drho[],double dmu[]){
     double S,mutacion,lij,k[p.N],inmunidad,cruzada;
     int i,j;
     S=1.0;
