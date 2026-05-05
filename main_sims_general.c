@@ -98,7 +98,7 @@ int main(){
 
      // Condiciones iniciales: solo el nodo 0 infectado
     
-    for (int i = 0; i < pa_het_gamma_0.N; i++) {
+    for (i = 0; i < pa_het_gamma_0.N; i++) {
         rho_het_gamma_0[i] = 0.0;
         mu_het_gamma_0[i]  = pa_het_gamma_0.mu_0;
         rho_het_gamma_003[i] = 0.0;
@@ -106,7 +106,7 @@ int main(){
     }
     rho_het_gamma_0[0] = rho_het_gamma_003[0] = I_het_gamma_003 = I_het_gamma_0 = 0.01;
 
-    for (int i = 0; i < pa_hom_gamma_0.N; i++) {
+    for (i = 0; i < pa_hom_gamma_0.N; i++) {
         rho_hom_gamma_0[i] = 0.0;
         mu_hom_gamma_0[i]  = pa_hom_gamma_0.mu_0;
         rho_hom_gamma_003[i] = 0.0;
@@ -114,7 +114,7 @@ int main(){
     }
     rho_hom_gamma_0[0] = rho_hom_gamma_003[0] = I_hom_gamma_0 = I_hom_gamma_003 = 0.01;
 
-    for (int i = 0; i < pa_reticula_gamma_0.N; i++) {
+    for (i = 0; i < pa_reticula_gamma_0.N; i++) {
         rho_reticula_gamma_0[i] = 0.0;
         mu_reticula_gamma_0[i]  = pa_reticula_gamma_0.mu_0;
         rho_reticula_gamma_003[i] = 0.0;
