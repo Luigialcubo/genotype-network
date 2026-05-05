@@ -37,12 +37,10 @@ double derivada_sis(double rho, ParametrosSIS p);
 double paso_rk4(double rho_actual, ParametrosSIS p);
 
 // Funcones rk4_sims.c
-void derivada(double rho[],double mu[],double X_uni[n*n],double A_uni[n*n],ParametrosSIMS p,double drho[],double dmu[]);
-void paso_rk4_sims(double rho[],double mu[],double X_uni[n*n],double A_uni[n*n],ParametrosSIMS p);
-
-// Funcones rk4_sims_general.c
-void derivada_general(double rho[], double mu[], double **X, double **A,ParametrosSIMS p, double drho[], double dmu[]);
-void paso_rk4_sims_general(double rho[], double mu[], double **X, double **A,ParametrosSIMS p);
+void derivada(double rho[],double mu[],double X_uni[],double A_uni[],ParametrosSIMS p,double drho[],double dmu[]);
+void paso_rk4_sims(double rho[],double mu[],double X_uni[],double A_uni[],ParametrosSIMS p);
+void cargar_red(const char *nombre_archivo, int N, double *A_uni, double *X_uni);
 
 //Funciones main.c
 void simulacion(double beta_inicio, double beta_final, double incremento);
+    

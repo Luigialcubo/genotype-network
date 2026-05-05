@@ -66,7 +66,7 @@ void derivada(double rho[],double mu[],double X_uni[],double A_uni[],ParametrosS
 
 
 //Esta funcion se encarga de obtener una nuevo rho y mu a partir de la anterior funcion
-void paso_rk4_sims(double rho[],double mu[],double X_uni[n*n],double A_uni[n*n],ParametrosSIMS p){
+void paso_rk4_sims(double rho[],double mu[],double X_uni[],double A_uni[],ParametrosSIMS p){
     double k1_rho[p.N], k2_rho[p.N], k3_rho[p.N], k4_rho[p.N];
     double k1_mu[p.N], k2_mu[p.N], k3_mu[p.N], k4_mu[p.N];
     double rho_aux[p.N],mu_aux[p.N];
@@ -103,3 +103,57 @@ void paso_rk4_sims(double rho[],double mu[],double X_uni[n*n],double A_uni[n*n],
         mu[i]+=dT*(k1_mu[i]+2*k2_mu[i]+2*k3_mu[i]+k4_mu[i])/6;
     }
 };
+
+void cargar_red(const char *nombre_archivo, int N, double *A_uni, double *X_uni){
+    int i, j, k;
+    int u, v;
+    int n_leido;
+    double nuevo, INF;
+
+    FILE *f = fopen(nombre_archivo, "r");
+    if (!f) {
+        printf("Error al abrir %s\n", nombre_archivo);
+        exit(1);
+    }
+    
+    fscanf(f, "%d", &n_leido);
+    if (n_leido != N) {
+        printf("Error: N esperado %d, pero el archivo dice %d\n", N, n_leido);
+        fclose(f);
+        exit(1);
+    }
+    
+    // Inicializar A con ceros
+     for (i = 0; i < N * N; i++) {
+        A_uni[i] = 0.0;
+    }
+
+    // Leer aristas y rellenar A (grafo no dirigido)
+    while (fscanf(f, "%d %d", &u, &v) == 2) {
+        A_uni[u * N + v] = 1.0;
+        A_uni[v * N + u] = 1.0;
+    }
+    fclose(f);
+
+    // Calcular matriz de distancias más cortas (Floyd‑Warshall)
+    INF = 1e9;
+    for (i = 0; i < N; i++) {
+     for (j = 0; j < N; j++) {
+            if (i == j)
+            X_uni[i * N + j] = 0.0;
+            else if (A_uni[i * N + j] > 0.5)
+            X_uni[i * N + j] = 1.0;
+            else
+            X_uni[i * N + j] = INF;
+        }
+    }
+    for (k = 0; k < N; k++) {
+        for (i = 0; i < N; i++) {
+            for (j = 0; j < N; j++) {
+                nuevo = X_uni[i * N + k] + X_uni[k * N + j];
+                if (nuevo < X_uni[i * N + j])
+                    X_uni[i * N + j] = nuevo;
+            }
+        }
+    }
+}

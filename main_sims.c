@@ -3,7 +3,6 @@ int main(){
     ParametrosSIMS pa_sis,pa_sir,pa_sirs,pa_simsb,pa_simsc;
     double iter_sis,iter_sir,iter_sirs,iter_simsb,iter_simsc,diff,t_sis,t_sir,t_sirs,t_simsb,t_simsc,I_simsb,I_simsc,R_efectivob,R_efectivoc;
 
-    double A[n][n],X[n][n];
     double A_uni[n*n], X_uni[n*n];
 
     double rho_sis[n],mu_sis[n],rho_sir[n],mu_sir[n],rho_sirs[n],mu_sirs[n];

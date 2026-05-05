@@ -1,171 +1,210 @@
-/*
- * main_sims_general.c
- *
- * Genera los datos para la Figura 3 del artículo usando las funciones genéricas
- * de rk4_sims_general.c.
- *   - Lee las tres redes sintéticas desde results/redes_txt/
- *   - Simula el modelo SIMS con inmunidad cruzada (delta = 3) para
- *     gamma = 0 y gamma = 0.03
- *   - Guarda archivos de dos columnas: tiempo  I(t)
- *
- * Compilación:
- *   gcc -o sims_general main_sims_general.c rk4_sims_general.c -lm -std=c99
- */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
 #include "definiciones.h"   // Contiene dT, ParametrosSIMS, etc.
+// Para compilar: gcc -o main_sims_general main_sims_general.c rk4_sims.c -lm -std=c99 -Wall
+// Para ejecutar: ./main_sims_general.exe
 
-
-void paso_rk4_sims_general(double rho[], double mu[], double **X, double **A,
-                           ParametrosSIMS p);
-
-/* ------------------------------------------------------------
- * Lee la red desde un archivo con el formato:
- *   N
- *   i1 j1
- *   i2 j2
- *   ...
- * Construye la matriz de adyacencia A (double **) y calcula
- * la matriz de distancias X (camino más corto) con Floyd‑Warshall.
- * Devuelve el número de nodos N.
- * ------------------------------------------------------------ */
-int leer_red(const char *nombre, double ***A_out, double ***X_out) {
-    FILE *f = fopen(nombre, "r");
-    if (!f) {
-        printf("Error: no se pudo abrir %s\n", nombre);
-        exit(1);
-    }
-    int N;
-    fscanf(f, "%d", &N);
-
-    // Asignar memoria para A y X (matrices N x N)
-    double **A = (double **)malloc(N * sizeof(double *));
-    double **X = (double **)malloc(N * sizeof(double *));
-    for (int i = 0; i < N; i++) {
-        A[i] = (double *)calloc(N, sizeof(double));  // todo ceros
-        X[i] = (double *)malloc(N * sizeof(double));
-    }
-
-    // Leer aristas
-    int u, v;
-    while (fscanf(f, "%d %d", &u, &v) == 2) {
-        A[u][v] = 1.0;
-        A[v][u] = 1.0;
-    }
-    fclose(f);
-
-    // Floyd‑Warshall para distancias más cortas
-    double INF = 1e9;
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            if (i == j)      X[i][j] = 0.0;
-            else if (A[i][j] > 0.5) X[i][j] = 1.0;
-            else             X[i][j] = INF;
-        }
-    }
-    for (int k = 0; k < N; k++)
-        for (int i = 0; i < N; i++)
-            for (int j = 0; j < N; j++)
-                if (X[i][k] + X[k][j] < X[i][j])
-                    X[i][j] = X[i][k] + X[k][j];
-
-    *A_out = A;
-    *X_out = X;
-    return N;
-}
-
-/* ------------------------------------------------------------
- * Libera una matriz de N filas.
- * ------------------------------------------------------------ */
-void liberar_matriz(double **M, int N) {
-    for (int i = 0; i < N; i++) free(M[i]);
-    free(M);
-}
-
-/* ------------------------------------------------------------
- * Simula el modelo SIMS sobre una red dada, para un valor de gamma
- * y guarda la prevalencia total I(t) en el archivo indicado.
- * ------------------------------------------------------------ */
-void simular_red(int N, double **A, double **X, double gamma,
-                 const char *archivo_salida) {
+int main(){
     // Parámetros fijos del modelo (Figura 3)
-    ParametrosSIMS pa;
-    pa.beta  = 0.3;
-    pa.mu_0  = 0.1;
-    pa.Dx    = 1.0e-5;
-    pa.alfa  = 0.03;
-    pa.delta = 3.0;        // inmunidad cruzada con alcance 3
-    pa.gamma = gamma;
-    pa.N     = N;
+    ParametrosSIMS pa_het_gamma_0;
+    pa_het_gamma_0.beta  = 0.3;
+    pa_het_gamma_0.mu_0  = 0.1;
+    pa_het_gamma_0.Dx    = 1.0e-5;
+    pa_het_gamma_0.alfa  = 0.03;
+    pa_het_gamma_0.delta = 3.0;        // inmunidad cruzada con alcance 3
+    pa_het_gamma_0.gamma = 0;
+    pa_het_gamma_0.N     = 23;
 
-    // Condiciones iniciales: solo el nodo 0 infectado
-    double rho[N], mu[N];
-    for (int i = 0; i < N; i++) {
-        rho[i] = 0.0;
-        mu[i]  = pa.mu_0;
+    ParametrosSIMS pa_het_gamma_003;
+    pa_het_gamma_003.beta  = 0.3;
+    pa_het_gamma_003.mu_0  = 0.1;
+    pa_het_gamma_003.Dx    = 1.0e-5;
+    pa_het_gamma_003.alfa  = 0.03;
+    pa_het_gamma_003.delta = 3.0;        // inmunidad cruzada con alcance 3
+    pa_het_gamma_003.gamma = 0.03;
+    pa_het_gamma_003.N     = 23;
+
+    ParametrosSIMS pa_hom_gamma_0;
+    pa_hom_gamma_0.beta  = 0.3;
+    pa_hom_gamma_0.mu_0  = 0.1;
+    pa_hom_gamma_0.Dx    = 1.0e-5;
+    pa_hom_gamma_0.alfa  = 0.03;
+    pa_hom_gamma_0.delta = 3.0;        // inmunidad cruzada con alcance 3
+    pa_hom_gamma_0.gamma = 0;
+    pa_hom_gamma_0.N     = 20;
+
+    ParametrosSIMS pa_hom_gamma_003;
+    pa_hom_gamma_003.beta  = 0.3;
+    pa_hom_gamma_003.mu_0  = 0.1;
+    pa_hom_gamma_003.Dx    = 1.0e-5;
+    pa_hom_gamma_003.alfa  = 0.03;
+    pa_hom_gamma_003.delta = 3.0;        // inmunidad cruzada con alcance 3
+    pa_hom_gamma_003.gamma = 0.03;
+    pa_hom_gamma_003.N     = 20;
+
+    ParametrosSIMS pa_reticula_gamma_0;
+    pa_reticula_gamma_0.beta  = 0.3;
+    pa_reticula_gamma_0.mu_0  = 0.1;
+    pa_reticula_gamma_0.Dx    = 1.0e-5;
+    pa_reticula_gamma_0.alfa  = 0.03;
+    pa_reticula_gamma_0.delta = 3.0;        // inmunidad cruzada con alcance 3
+    pa_reticula_gamma_0.gamma = 0;
+    pa_reticula_gamma_0.N     = 100;
+         
+    ParametrosSIMS pa_reticula_gamma_003;
+    pa_reticula_gamma_003.beta  = 0.3;
+    pa_reticula_gamma_003.mu_0  = 0.1;
+    pa_reticula_gamma_003.Dx    = 1.0e-5;
+    pa_reticula_gamma_003.alfa  = 0.03;
+    pa_reticula_gamma_003.delta = 3.0;        // inmunidad cruzada con alcance 3
+    pa_reticula_gamma_003.gamma = 0.03;
+    pa_reticula_gamma_003.N     = 100;
+
+    //Retícula 10x10
+    double A_uni_reticula[pa_reticula_gamma_0.N*pa_reticula_gamma_0.N], X_uni_reticula[pa_reticula_gamma_0.N*pa_reticula_gamma_0.N];
+    //Homogénea
+    double A_uni_hom[pa_hom_gamma_0.N*pa_hom_gamma_0.N], X_uni_hom[pa_hom_gamma_0.N*pa_hom_gamma_0.N];
+    //Heterogénea
+    double A_uni_het[pa_het_gamma_0.N*pa_het_gamma_0.N], X_uni_het[pa_het_gamma_0.N*pa_het_gamma_0.N];
+
+    double rho_het_gamma_0[pa_het_gamma_0.N], mu_het_gamma_0[pa_het_gamma_0.N];
+    double rho_het_gamma_003[pa_het_gamma_003.N], mu_het_gamma_003[pa_het_gamma_003.N];
+    double rho_hom_gamma_0[pa_hom_gamma_0.N], mu_hom_gamma_0[pa_hom_gamma_0.N];
+    double rho_hom_gamma_003[pa_hom_gamma_003.N], mu_hom_gamma_003[pa_hom_gamma_003.N];
+    double rho_reticula_gamma_0[pa_reticula_gamma_0.N], mu_reticula_gamma_0[pa_reticula_gamma_0.N];
+    double rho_reticula_gamma_003[pa_reticula_gamma_003.N], mu_reticula_gamma_003[pa_reticula_gamma_003.N];
+    double I_het_gamma_0, I_het_gamma_003, I_hom_gamma_0, I_hom_gamma_003, I_reticula_gamma_0, I_reticula_gamma_003;
+    double t_het_gamma_0, t_het_gamma_003, t_hom_gamma_0, t_hom_gamma_003, t_reticula_gamma_0, t_reticula_gamma_003;
+    double iter_het_gamma_0, iter_het_gamma_003, iter_hom_gamma_0, iter_hom_gamma_003, iter_reticula_gamma_0, iter_reticula_gamma_003;
+    int i;
+
+    FILE *sims_het_gamma_0;
+    FILE *sims_het_gamma_003;
+    FILE *sims_hom_gamma_0;
+    FILE *sims_hom_gamma_003;
+    FILE *sims_reticula_gamma_0;
+    FILE *sims_reticula_gamma_003;
+
+    sims_het_gamma_0 = fopen("results/fig3/sims_het_gamma_0.txt", "w");
+    sims_het_gamma_003 = fopen("results/fig3/sims_het_gamma_003.txt", "w");
+    sims_hom_gamma_0 = fopen("results/fig3/sims_hom_gamma_0.txt", "w");
+    sims_hom_gamma_003 = fopen("results/fig3/sims_hom_gamma_003.txt", "w");
+    sims_reticula_gamma_0 = fopen("results/fig3/sims_reticula_gamma_0.txt", "w");
+    sims_reticula_gamma_003 = fopen("results/fig3/sims_reticula_gamma_003.txt", "w");
+
+    if (sims_het_gamma_0 == NULL || sims_het_gamma_003 == NULL || sims_hom_gamma_0 == NULL || sims_hom_gamma_003 == NULL || sims_reticula_gamma_0 == NULL || sims_reticula_gamma_003 == NULL) {
+        printf("Error: No se pudo abrir el archivo.\n");
+        return 1; 
     }
-    rho[0] = 0.01;
 
-    double t = 0.0;
-    int max_iter = (int)(2000.0 / dT);   // 5000 días, paso 0.01
-
-    FILE *salida = fopen(archivo_salida, "w");
-    if (!salida) {
-        printf("Error creando %s\n", archivo_salida);
-        exit(1);
+     // Condiciones iniciales: solo el nodo 0 infectado
+    
+    for (int i = 0; i < pa_het_gamma_0.N; i++) {
+        rho_het_gamma_0[i] = 0.0;
+        mu_het_gamma_0[i]  = pa_het_gamma_0.mu_0;
+        rho_het_gamma_003[i] = 0.0;
+        mu_het_gamma_003[i]  = pa_het_gamma_003.mu_0;
     }
+    rho_het_gamma_0[0] = rho_het_gamma_003[0] = I_het_gamma_003 = I_het_gamma_0 = 0.01;
 
-    for (int iter = 0; iter < max_iter; iter++) {
-        // Prevalencia total
-        double I = 0.0;
-        for (int i = 0; i < N; i++) I += rho[i];
-
-        fprintf(salida, "%.6f\t%.6f\n", t, I);
-
-        // Un paso del integrador RK4
-        paso_rk4_sims_general(rho, mu, X, A, pa);
-        t += dT;
+    for (int i = 0; i < pa_hom_gamma_0.N; i++) {
+        rho_hom_gamma_0[i] = 0.0;
+        mu_hom_gamma_0[i]  = pa_hom_gamma_0.mu_0;
+        rho_hom_gamma_003[i] = 0.0;
+        mu_hom_gamma_003[i]  = pa_hom_gamma_003.mu_0;
     }
+    rho_hom_gamma_0[0] = rho_hom_gamma_003[0] = I_hom_gamma_0 = I_hom_gamma_003 = 0.01;
 
-    fclose(salida);
-}
+    for (int i = 0; i < pa_reticula_gamma_0.N; i++) {
+        rho_reticula_gamma_0[i] = 0.0;
+        mu_reticula_gamma_0[i]  = pa_reticula_gamma_0.mu_0;
+        rho_reticula_gamma_003[i] = 0.0;
+        mu_reticula_gamma_003[i]  = pa_reticula_gamma_003.mu_0;
+    }
+    rho_reticula_gamma_0[0] = rho_reticula_gamma_003[0] = I_reticula_gamma_0 = I_reticula_gamma_003 = 0.01;
 
-/* ------------------------------------------------------------
- * MAIN
- * ------------------------------------------------------------ */
-int main() {
-    // Lista de archivos de red y etiquetas
-    const char *nombres_red[] = {
-        "results/redes_txt/reticula_10x10.txt",
-        "results/redes_txt/red_homogenea.txt",
-        "results/redes_txt/red_heterogenea.txt"
-    };
-    const char *etiquetas[] = {"reticula", "hom", "het"};
-    double gammas[]         = {0.0, 0.03};
-    const char *gamma_str[] = {"0", "003"};
+    // Carga las tres redes y calcula sus matrices de adyacencia y distancias
+    cargar_red("results/redes_txt/red_heterogenea.txt", pa_het_gamma_0.N, A_uni_het, X_uni_het);
+    cargar_red("results/redes_txt/red_homogenea.txt", pa_hom_gamma_0.N, A_uni_hom, X_uni_hom);
+    cargar_red("results/redes_txt/reticula_10x10.txt", pa_reticula_gamma_0.N, A_uni_reticula, X_uni_reticula);
 
-    // Para cada red…
-    for (int r = 0; r < 3; r++) {
-        double **A, **X;
-        int N = leer_red(nombres_red[r], &A, &X);
-        printf("Red %s cargada (N=%d)\n", etiquetas[r], N);
-
-        // …y cada valor de gamma
-        for (int g = 0; g < 2; g++) {
-            char archivo_salida[256];
-            sprintf(archivo_salida, "results/fig3/datos_sims_%s_gamma_%s.txt",
-                    etiquetas[r], gamma_str[g]);
-
-            printf("   Simulando gamma=%.2f -> %s\n", gammas[g], archivo_salida);
-            simular_red(N, A, X, gammas[g], archivo_salida);
+    // SIMS het gamma = 0
+    do{
+        fprintf(sims_het_gamma_0, "%f\t%f\n", t_het_gamma_0, I_het_gamma_0);
+        I_het_gamma_0 = 0;
+        paso_rk4_sims(rho_het_gamma_0,mu_het_gamma_0,X_uni_het,A_uni_het,pa_het_gamma_0);
+        for(i=0;i<pa_het_gamma_0.N;i++){
+            I_het_gamma_0+=rho_het_gamma_0[i];
         }
+        t_het_gamma_0 += dT;
+        iter_het_gamma_0++;
+    } while (iter_het_gamma_0 < (2000/dT));
 
-        liberar_matriz(A, N);
-        liberar_matriz(X, N);
-    }
+    // SIMS het gamma = 003
+    do{
+        fprintf(sims_het_gamma_003, "%f\t%f\n", t_het_gamma_003, I_het_gamma_003);
+        I_het_gamma_003 = 0;
+        paso_rk4_sims(rho_het_gamma_003,mu_het_gamma_003,X_uni_het,A_uni_het,pa_het_gamma_003);
+        for(i=0;i<pa_het_gamma_003.N;i++){
+            I_het_gamma_003+=rho_het_gamma_003[i];
+        }
+        t_het_gamma_003 += dT;
+        iter_het_gamma_003++;
+    } while (iter_het_gamma_003 < (2000/dT));
 
-    printf("Simulaciones terminadas.\n");
+    // SIMS hom gamma = 0
+    do{
+        fprintf(sims_hom_gamma_0, "%f\t%f\n", t_hom_gamma_0, I_hom_gamma_0);
+        I_hom_gamma_0 = 0;
+        paso_rk4_sims(rho_hom_gamma_0,mu_hom_gamma_0,X_uni_hom,A_uni_hom,pa_hom_gamma_0);
+        for(i=0;i<pa_hom_gamma_0.N;i++){
+            I_hom_gamma_0+=rho_hom_gamma_0[i];
+        }
+        t_hom_gamma_0 += dT;
+        iter_hom_gamma_0++;
+    } while (iter_hom_gamma_0 < (2000/dT));
+
+    // SIMS hom gamma = 003
+    do{
+        fprintf(sims_hom_gamma_003, "%f\t%f\n", t_hom_gamma_003, I_hom_gamma_003);
+        I_hom_gamma_003 = 0;
+        paso_rk4_sims(rho_hom_gamma_003,mu_hom_gamma_003,X_uni_hom,A_uni_hom,pa_hom_gamma_003);
+        for(i=0;i<pa_hom_gamma_003.N;i++){
+            I_hom_gamma_003+=rho_hom_gamma_003[i];
+        }
+        t_hom_gamma_003 += dT;
+        iter_hom_gamma_003++;
+    } while (iter_hom_gamma_003 < (2000/dT));
+
+    // SIMS reticula gamma = 0
+    do{
+        fprintf(sims_reticula_gamma_0, "%f\t%f\n", t_reticula_gamma_0, I_reticula_gamma_0);
+        I_reticula_gamma_0 = 0;
+        paso_rk4_sims(rho_reticula_gamma_0,mu_reticula_gamma_0,X_uni_reticula,A_uni_reticula,pa_reticula_gamma_0);
+        for(i=0;i<pa_reticula_gamma_0.N;i++){
+            I_reticula_gamma_0+=rho_reticula_gamma_0[i];
+        }
+        t_reticula_gamma_0 += dT;
+        iter_reticula_gamma_0++;
+    } while (iter_reticula_gamma_0 < (2000/dT));
+
+    // SIMS reticula gamma = 003
+    do{
+        fprintf(sims_reticula_gamma_003, "%f\t%f\n", t_reticula_gamma_003, I_reticula_gamma_003);
+        I_reticula_gamma_003 = 0;
+        paso_rk4_sims(rho_reticula_gamma_003,mu_reticula_gamma_003,X_uni_reticula,A_uni_reticula,pa_reticula_gamma_003);
+        for(i=0;i<pa_reticula_gamma_003.N;i++){
+            I_reticula_gamma_003+=rho_reticula_gamma_003[i];
+        }
+        t_reticula_gamma_003 += dT;
+        iter_reticula_gamma_003++;
+    } while (iter_reticula_gamma_003 < (2000/dT));
+
+    fclose(sims_het_gamma_0);
+    fclose(sims_het_gamma_003);
+    fclose(sims_hom_gamma_0);
+    fclose(sims_hom_gamma_003);
+    fclose(sims_reticula_gamma_0);
+    fclose(sims_reticula_gamma_003);
+
     return 0;
 }

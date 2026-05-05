@@ -22,14 +22,14 @@ RED_HOMOG   = "results/redes_txt/red_homogenea.txt"
 RED_HETEROG = "results/redes_txt/red_heterogenea.txt"
 
 # Simulaciones gamma = 0
-SIM_LATTICE_G0 = "results/fig3/datos_sims_reticula_gamma_0.txt"
-SIM_HOM_G0     = "results/fig3/datos_sims_hom_gamma_0.txt"
-SIM_HETER_G0   = "results/fig3/datos_sims_het_gamma_0.txt"
+SIM_LATTICE_G0 = "results/fig3/sims_reticula_gamma_0.txt"
+SIM_HOM_G0     = "results/fig3/sims_hom_gamma_0.txt"
+SIM_HETER_G0   = "results/fig3/sims_het_gamma_0.txt"
 
 # Simulaciones gamma = 0.03
-SIM_LATTICE_G003 = "results/fig3/datos_sims_reticula_gamma_003.txt"
-SIM_HOM_G003     = "results/fig3/datos_sims_hom_gamma_003.txt"
-SIM_HETER_G003   = "results/fig3/datos_sims_het_gamma_003.txt"
+SIM_LATTICE_G003 = "results/fig3/sims_reticula_gamma_003.txt"
+SIM_HOM_G003     = "results/fig3/sims_hom_gamma_003.txt"
+SIM_HETER_G003   = "results/fig3/sims_het_gamma_003.txt"
 
 # Carpeta de salida
 OUT_DIR = "plots/fig3"
