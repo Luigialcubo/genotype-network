@@ -94,4 +94,10 @@ if __name__ == "__main__":
                     "Retícula 2D de 10x10 nodos", con_etiquetas=False)
     exportar_txt(red_lattice, "reticula_10x10.txt")
 
+    hojas_ceros = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    red_ceros = crear_cadena_estrellas(20, hojas_ceros)
+    guardar_grafico(red_ceros, "cadena_estrellas_ceros.png",
+                    "Cadena lineal de 20 clusters y ninguna hoja")
+    exportar_txt(red_ceros, "red_ceros.txt")
+
 
