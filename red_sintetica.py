@@ -82,10 +82,10 @@ if __name__ == "__main__":
     exportar_txt(red_homogenea, "red_homogenea.txt")
 
     #Red 2 heterogenea, 5 clusters
-    hojas_heterogenea = [2, 5, 3, 6, 2]
-    red_heterogenea = crear_cadena_estrellas(5, hojas_heterogenea)
+    hojas_heterogenea = [40, 0, 40, 0, 40, 0, 40, 0, 40]
+    red_heterogenea = crear_cadena_estrellas(9, hojas_heterogenea)
     guardar_grafico(red_heterogenea, "cadena_estrellas_heterogenea.png",
-                    "Cadena de estrellas heterogénea (tamaños: 2,5,3,6,2)")
+                    "Cadena de estrellas heterogénea")
     exportar_txt(red_heterogenea, "red_heterogenea.txt")
 
     #Reticula lattice
@@ -100,11 +100,6 @@ if __name__ == "__main__":
                     "Cadena lineal de 20 clusters y ninguna hoja")
     exportar_txt(red_ceros, "red_ceros.txt")
 
-    hojas_util = [40, 0, 40, 0, 40, 0, 40, 0, 40]
-    red_util = crear_cadena_estrellas(9, hojas_util)
-    guardar_grafico(red_util, "figura3.png",
-                    "Cadena heterogenea")
-    exportar_txt(red_util, "red_util.txt")
 
 
 
