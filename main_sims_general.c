@@ -12,7 +12,7 @@ int main(){
     pa_het_gamma_0.alfa  = 0.03;
     pa_het_gamma_0.delta = 3.0;        // inmunidad cruzada con alcance 3
     pa_het_gamma_0.gamma = 0;
-    pa_het_gamma_0.N     = 23;
+    pa_het_gamma_0.N     = 198;
 
     ParametrosSIMS pa_het_gamma_003;
     pa_het_gamma_003.beta  = 0.3;
@@ -21,7 +21,7 @@ int main(){
     pa_het_gamma_003.alfa  = 0.03;
     pa_het_gamma_003.delta = 3.0;        // inmunidad cruzada con alcance 3
     pa_het_gamma_003.gamma = 0.03;
-    pa_het_gamma_003.N     = 23;
+    pa_het_gamma_003.N     = 198;
 
     ParametrosSIMS pa_hom_gamma_0;
     pa_hom_gamma_0.beta  = 0.3;
@@ -30,7 +30,7 @@ int main(){
     pa_hom_gamma_0.alfa  = 0.03;
     pa_hom_gamma_0.delta = 3.0;        // inmunidad cruzada con alcance 3
     pa_hom_gamma_0.gamma = 0;
-    pa_hom_gamma_0.N     = 20;
+    pa_hom_gamma_0.N     = 217;
 
     ParametrosSIMS pa_hom_gamma_003;
     pa_hom_gamma_003.beta  = 0.3;
@@ -39,7 +39,7 @@ int main(){
     pa_hom_gamma_003.alfa  = 0.03;
     pa_hom_gamma_003.delta = 3.0;        // inmunidad cruzada con alcance 3
     pa_hom_gamma_003.gamma = 0.03;
-    pa_hom_gamma_003.N     = 20;
+    pa_hom_gamma_003.N     = 217;
 
     ParametrosSIMS pa_reticula_gamma_0;
     pa_reticula_gamma_0.beta  = 0.3;
@@ -48,7 +48,7 @@ int main(){
     pa_reticula_gamma_0.alfa  = 0.03;
     pa_reticula_gamma_0.delta = 3.0;        // inmunidad cruzada con alcance 3
     pa_reticula_gamma_0.gamma = 0;
-    pa_reticula_gamma_0.N     = 100;
+    pa_reticula_gamma_0.N     = 150;
          
     ParametrosSIMS pa_reticula_gamma_003;
     pa_reticula_gamma_003.beta  = 0.3;
@@ -57,7 +57,7 @@ int main(){
     pa_reticula_gamma_003.alfa  = 0.03;
     pa_reticula_gamma_003.delta = 3.0;        // inmunidad cruzada con alcance 3
     pa_reticula_gamma_003.gamma = 0.03;
-    pa_reticula_gamma_003.N     = 100;
+    pa_reticula_gamma_003.N     = 150;
 
     //Retícula 10x10
     double A_uni_reticula[pa_reticula_gamma_0.N*pa_reticula_gamma_0.N], X_uni_reticula[pa_reticula_gamma_0.N*pa_reticula_gamma_0.N];
@@ -125,7 +125,7 @@ int main(){
     // Carga las tres redes y calcula sus matrices de adyacencia y distancias
     cargar_red("results/redes_txt/red_heterogenea.txt", pa_het_gamma_0.N, A_uni_het, X_uni_het);
     cargar_red("results/redes_txt/red_homogenea.txt", pa_hom_gamma_0.N, A_uni_hom, X_uni_hom);
-    cargar_red("results/redes_txt/reticula_10x10.txt", pa_reticula_gamma_0.N, A_uni_reticula, X_uni_reticula);
+    cargar_red("results/redes_txt/reticula_3x50.txt", pa_reticula_gamma_0.N, A_uni_reticula, X_uni_reticula);
 
     // SIMS het gamma = 0
     do{

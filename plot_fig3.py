@@ -17,7 +17,7 @@ import os
 # 0. CONFIGURACIÓN DE RUTAS
 # ============================================================
 # Redes
-RED_LATTICE = "results/redes_txt/reticula_10x10.txt"
+RED_LATTICE = "results/redes_txt/reticula_3x50.txt"
 RED_HOMOG   = "results/redes_txt/red_homogenea.txt"
 RED_HETEROG = "results/redes_txt/red_heterogenea.txt"
 
@@ -71,13 +71,13 @@ G_lattice = cargar_red(RED_LATTICE)
 G_hom     = cargar_red(RED_HOMOG)
 G_heter   = cargar_red(RED_HETEROG)
 
-#t_lat_g0, I_lat_g0 = cargar_serie(SIM_LATTICE_G0)
-#t_hom_g0, I_hom_g0 = cargar_serie(SIM_HOM_G0)
-#t_het_g0, I_het_g0 = cargar_serie(SIM_HETER_G0)
+t_lat_g0, I_lat_g0 = cargar_serie(SIM_LATTICE_G0)
+t_hom_g0, I_hom_g0 = cargar_serie(SIM_HOM_G0)
+t_het_g0, I_het_g0 = cargar_serie(SIM_HETER_G0)
 
-#t_lat_g03, I_lat_g03 = cargar_serie(SIM_LATTICE_G003)
-#t_hom_g03, I_hom_g03 = cargar_serie(SIM_HOM_G003)
-#t_het_g03, I_het_g03 = cargar_serie(SIM_HETER_G003)
+t_lat_g03, I_lat_g03 = cargar_serie(SIM_LATTICE_G003)
+t_hom_g03, I_hom_g03 = cargar_serie(SIM_HOM_G003)
+t_het_g03, I_het_g03 = cargar_serie(SIM_HETER_G003)
 
 # Crear carpeta de salida si no existe
 os.makedirs(OUT_DIR, exist_ok=True)
@@ -119,7 +119,7 @@ plt.tight_layout()
 plt.savefig(os.path.join(OUT_DIR, 'fig3a.png'), dpi=300)
 plt.close(fig_a)
 print(" -> Guardada en", os.path.join(OUT_DIR, 'fig3a.png'))
-"""
+
 # ============================================================
 # 4. PANEL (b): INMUNIDAD DURADERA (gamma = 0)
 # ============================================================
@@ -163,4 +163,3 @@ plt.close(fig_c)
 print(" -> Guardada en", os.path.join(OUT_DIR, 'fig3c.png'))
 
 print("\n¡Las tres figuras se han generado correctamente!")
-"""
