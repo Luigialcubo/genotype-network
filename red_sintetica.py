@@ -48,7 +48,7 @@ def crear_reticula(filas, columnas):
 #Plot
 def guardar_grafico(G, nombre_archivo, titulo, con_etiquetas=False):
     
-    plt.figure(figsize=(8, 6))
+    plt.figure(figsize=(16, 12))
     # Usamos spring_layout para una disposición legible 
     pos = nx.spring_layout(G, seed=42, k=0.5)
     nx.draw(G, pos, with_labels=con_etiquetas, node_color='lightblue',
@@ -89,15 +89,22 @@ if __name__ == "__main__":
     exportar_txt(red_heterogenea, "red_heterogenea.txt")
 
     #Reticula lattice
-    red_lattice = crear_reticula(10, 10)
-    guardar_grafico(red_lattice, "reticula_10x10.png",
-                    "Retícula 2D de 10x10 nodos", con_etiquetas=False)
-    exportar_txt(red_lattice, "reticula_10x10.txt")
+    red_lattice = crear_reticula(3, 40)
+    guardar_grafico(red_lattice, "reticula_3x40.png",
+                    "Retícula 2D de 3x40 nodos", con_etiquetas=False)
+    exportar_txt(red_lattice, "reticula_3x40.txt")
 
     hojas_ceros = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     red_ceros = crear_cadena_estrellas(20, hojas_ceros)
     guardar_grafico(red_ceros, "cadena_estrellas_ceros.png",
                     "Cadena lineal de 20 clusters y ninguna hoja")
     exportar_txt(red_ceros, "red_ceros.txt")
+
+    hojas_util = [40, 0, 40, 0, 40, 0, 40, 0, 40]
+    red_util = crear_cadena_estrellas(9, hojas_util)
+    guardar_grafico(red_util, "figura3.png",
+                    "Cadena heterogenea")
+    exportar_txt(red_util, "red_util.txt")
+
 
 
