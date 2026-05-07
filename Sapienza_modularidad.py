@@ -5,7 +5,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_FILE = BASE_DIR / "BWetal2022_2LCC.edge"
-RESULTS_DIR = BASE_DIR / "results"
+RESULTS_DIR = BASE_DIR / "results"/"H3N2_txt"
 RESULTS_DIR.mkdir(exist_ok=True)
 
 print("Carpeta del script:", BASE_DIR)
