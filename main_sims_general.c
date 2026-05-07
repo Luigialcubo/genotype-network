@@ -12,7 +12,7 @@ int main(){
     pa_het_gamma_0.alfa  = 0.03;
     pa_het_gamma_0.delta = 3.0;        // inmunidad cruzada con alcance 3
     pa_het_gamma_0.gamma = 0;
-    pa_het_gamma_0.N     = 198;
+    pa_het_gamma_0.N     = 430;
 
     ParametrosSIMS pa_het_gamma_003;
     pa_het_gamma_003.beta  = 0.3;
@@ -21,7 +21,7 @@ int main(){
     pa_het_gamma_003.alfa  = 0.03;
     pa_het_gamma_003.delta = 3.0;        // inmunidad cruzada con alcance 3
     pa_het_gamma_003.gamma = 0.03;
-    pa_het_gamma_003.N     = 198;
+    pa_het_gamma_003.N     = 430;
 
     ParametrosSIMS pa_hom_gamma_0;
     pa_hom_gamma_0.beta  = 0.3;
@@ -30,7 +30,7 @@ int main(){
     pa_hom_gamma_0.alfa  = 0.03;
     pa_hom_gamma_0.delta = 3.0;        // inmunidad cruzada con alcance 3
     pa_hom_gamma_0.gamma = 0;
-    pa_hom_gamma_0.N     = 217;
+    pa_hom_gamma_0.N     = 481;
 
     ParametrosSIMS pa_hom_gamma_003;
     pa_hom_gamma_003.beta  = 0.3;
@@ -39,7 +39,7 @@ int main(){
     pa_hom_gamma_003.alfa  = 0.03;
     pa_hom_gamma_003.delta = 3.0;        // inmunidad cruzada con alcance 3
     pa_hom_gamma_003.gamma = 0.03;
-    pa_hom_gamma_003.N     = 217;
+    pa_hom_gamma_003.N     = 481;
 
     ParametrosSIMS pa_reticula_gamma_0;
     pa_reticula_gamma_0.beta  = 0.3;
@@ -59,12 +59,20 @@ int main(){
     pa_reticula_gamma_003.gamma = 0.03;
     pa_reticula_gamma_003.N     = 150;
 
-    //Retícula 10x10
-    double A_uni_reticula[pa_reticula_gamma_0.N*pa_reticula_gamma_0.N], X_uni_reticula[pa_reticula_gamma_0.N*pa_reticula_gamma_0.N];
+    //Retícula 3x70
+    double *A_uni_reticula = malloc(sizeof(double) * pa_reticula_gamma_0.N * pa_reticula_gamma_0.N);
+    double *X_uni_reticula = malloc(sizeof(double) * pa_reticula_gamma_0.N * pa_reticula_gamma_0.N);
     //Homogénea
-    double A_uni_hom[pa_hom_gamma_0.N*pa_hom_gamma_0.N], X_uni_hom[pa_hom_gamma_0.N*pa_hom_gamma_0.N];
+    double *A_uni_hom = malloc(sizeof(double) * pa_hom_gamma_0.N * pa_hom_gamma_0.N);
+    double *X_uni_hom = malloc(sizeof(double) * pa_hom_gamma_0.N * pa_hom_gamma_0.N);
     //Heterogénea
-    double A_uni_het[pa_het_gamma_0.N*pa_het_gamma_0.N], X_uni_het[pa_het_gamma_0.N*pa_het_gamma_0.N];
+    double *A_uni_het = malloc(sizeof(double) * pa_het_gamma_0.N * pa_het_gamma_0.N);
+    double *X_uni_het = malloc(sizeof(double) * pa_het_gamma_0.N * pa_het_gamma_0.N);
+
+    if (!A_uni_reticula || !X_uni_reticula || !A_uni_hom || !X_uni_hom || !A_uni_het || !X_uni_het) {
+        printf("Error: malloc failed\n");
+        return 1;
+    }
 
     double rho_het_gamma_0[pa_het_gamma_0.N], mu_het_gamma_0[pa_het_gamma_0.N];
     double rho_het_gamma_003[pa_het_gamma_003.N], mu_het_gamma_003[pa_het_gamma_003.N];
@@ -72,9 +80,9 @@ int main(){
     double rho_hom_gamma_003[pa_hom_gamma_003.N], mu_hom_gamma_003[pa_hom_gamma_003.N];
     double rho_reticula_gamma_0[pa_reticula_gamma_0.N], mu_reticula_gamma_0[pa_reticula_gamma_0.N];
     double rho_reticula_gamma_003[pa_reticula_gamma_003.N], mu_reticula_gamma_003[pa_reticula_gamma_003.N];
-    double I_het_gamma_0, I_het_gamma_003, I_hom_gamma_0, I_hom_gamma_003, I_reticula_gamma_0, I_reticula_gamma_003;
-    double t_het_gamma_0, t_het_gamma_003, t_hom_gamma_0, t_hom_gamma_003, t_reticula_gamma_0, t_reticula_gamma_003;
-    double iter_het_gamma_0, iter_het_gamma_003, iter_hom_gamma_0, iter_hom_gamma_003, iter_reticula_gamma_0, iter_reticula_gamma_003;
+    double I_het_gamma_0 = 0.0, I_het_gamma_003 = 0.0, I_hom_gamma_0 = 0.0, I_hom_gamma_003 = 0.0, I_reticula_gamma_0 = 0.0, I_reticula_gamma_003 = 0.0;
+    double t_het_gamma_0 = 0.0, t_het_gamma_003 = 0.0, t_hom_gamma_0 = 0.0, t_hom_gamma_003 = 0.0, t_reticula_gamma_0 = 0.0, t_reticula_gamma_003 = 0.0;
+    int iter_het_gamma_0 = 0, iter_het_gamma_003 = 0, iter_hom_gamma_0 = 0, iter_hom_gamma_003 = 0, iter_reticula_gamma_0 = 0, iter_reticula_gamma_003 = 0;
     int i;
 
     FILE *sims_het_gamma_0;
@@ -123,6 +131,11 @@ int main(){
     rho_reticula_gamma_0[0] = rho_reticula_gamma_003[0] = I_reticula_gamma_0 = I_reticula_gamma_003 = 0.01;
 
     // Carga las tres redes y calcula sus matrices de adyacencia y distancias
+    if (!A_uni_reticula || !X_uni_reticula || !A_uni_hom || !X_uni_hom || !A_uni_het || !X_uni_het) {
+        printf("Error: malloc failed\n");
+        return 1;
+    }
+
     cargar_red("results/redes_txt/red_heterogenea.txt", pa_het_gamma_0.N, A_uni_het, X_uni_het);
     cargar_red("results/redes_txt/red_homogenea.txt", pa_hom_gamma_0.N, A_uni_hom, X_uni_hom);
     cargar_red("results/redes_txt/reticula_3x50.txt", pa_reticula_gamma_0.N, A_uni_reticula, X_uni_reticula);
@@ -205,6 +218,13 @@ int main(){
     fclose(sims_hom_gamma_003);
     fclose(sims_reticula_gamma_0);
     fclose(sims_reticula_gamma_003);
+
+    free(A_uni_reticula);
+    free(X_uni_reticula);
+    free(A_uni_hom);
+    free(X_uni_hom);
+    free(A_uni_het);
+    free(X_uni_het);
 
     return 0;
 }

@@ -17,7 +17,7 @@ import os
 # 0. CONFIGURACIÓN DE RUTAS
 # ============================================================
 # Redes
-RED_LATTICE = "results/redes_txt/reticula_3x50.txt"
+RED_LATTICE = "results/redes_txt/reticula_3x70.txt"
 RED_HOMOG   = "results/redes_txt/red_homogenea.txt"
 RED_HETEROG = "results/redes_txt/red_heterogenea.txt"
 
