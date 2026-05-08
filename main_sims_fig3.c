@@ -1,7 +1,7 @@
 
 #include "definiciones.h"   // Contiene dT, ParametrosSIMS, etc.
-// Para compilar: gcc -o main_sims_general main_sims_general.c rk4_sims.c -lm -std=c99 -Wall
-// Para ejecutar: ./main_sims_general.exe
+// Para compilar: gcc -o main_sims_fig3 main_sims_fig3.c rk4_sims.c -lm -std=c99 -Wall
+// Para ejecutar: ./main_sims_fig3.exe
 
 int main(){
     // Parámetros fijos del modelo (Figura 3)
