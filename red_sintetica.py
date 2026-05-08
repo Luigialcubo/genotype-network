@@ -75,24 +75,24 @@ def exportar_txt(G, nombre_archivo):
 #Generacion de las redes en main
 if __name__ == "__main__":
     #Red 1 homogenea, 5 clusters con 3 hojas cada uno
-    hojas_homogenea = [40, 0, 0, 0, 40, 0, 0, 0, 40, 0, 0, 0, 40, 0, 0, 0, 40]
-    red_homogenea = crear_cadena_estrellas(17, hojas_homogenea)
+    hojas_homogenea = [40, 0, 0, 0, 40, 0, 0, 0, 40, 0, 0, 0, 40, 0, 0, 0, 40, 0, 0, 0, 40, 0, 0, 0, 40, 0, 0, 0, 40, 0, 0, 0, 40, 0, 0, 0, 40, 0, 0, 0, 40]
+    red_homogenea = crear_cadena_estrellas(41, hojas_homogenea)
     guardar_grafico(red_homogenea, "cadena_estrellas_homogenea.png",
-                    "Cadena de estrellas homogénea (5 clusters, 41 hojas)")
+                    "Cadena de estrellas homogénea (11 clusters, 41 hojas)")
     exportar_txt(red_homogenea, "red_homogenea.txt")
 
     #Red 2 heterogenea, 5 clusters
-    hojas_heterogenea = [32, 0, 0, 0, 39, 0, 0, 0, 28, 0, 0, 0, 42, 0, 0, 0, 40]
-    red_heterogenea = crear_cadena_estrellas(17, hojas_heterogenea)
+    hojas_heterogenea = [31, 0, 0, 0, 43, 0, 0, 0, 27, 0, 0, 0, 38, 0, 0, 0, 22, 0, 0, 0, 44, 0, 0, 0, 35, 0, 0, 0, 41, 0, 0, 0, 29, 0, 0, 0, 37, 0, 0, 0, 42]
+    red_heterogenea = crear_cadena_estrellas(41, hojas_heterogenea)
     guardar_grafico(red_heterogenea, "cadena_estrellas_heterogenea.png",
                     "Cadena de estrellas heterogénea")
     exportar_txt(red_heterogenea, "red_heterogenea.txt")
 
     #Reticula lattice
-    red_lattice = crear_reticula(3, 50)
-    guardar_grafico(red_lattice, "reticula_3x50.png",
-                    "Retícula 2D de 3x50 nodos", con_etiquetas=False)
-    exportar_txt(red_lattice, "reticula_3x50.txt")
+    red_lattice = crear_reticula(3, 70)
+    guardar_grafico(red_lattice, "reticula_3x70.png",
+                    "Retícula 2D de 3x70 nodos", con_etiquetas=False)
+    exportar_txt(red_lattice, "reticula_3x70.txt")
 
     hojas_ceros = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     red_ceros = crear_cadena_estrellas(20, hojas_ceros)
