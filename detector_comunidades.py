@@ -22,20 +22,22 @@ def get_communities(graph):
     return partition
 
 def leer_red(archivo):
-    """Lee una red desde un archivo con formato de lista de aristas: u v."""
+    """Lee red con formato: primera línea = N, luego aristas i j."""
     G = nx.Graph()
     with open(archivo, 'r') as f:
-        for linea in f:
-            linea = linea.strip()
-            if not linea:
-                continue
-            u, v = map(int, linea.split()[:2])
-            G.add_edge(u, v)
+        lineas = f.read().strip().splitlines()
+    n = int(lineas[0])                     # número total de nodos
+    G.add_nodes_from(range(n))
+    for linea in lineas[1:]:
+        if not linea.strip():
+            continue
+        u, v = map(int, linea.split()[:2])
+        G.add_edge(u, v)
     return G
 
 # Carpetas
 carpeta_redes = "componentes_conexas"
-carpeta_salida = "componentes_conexas_particion"
+carpeta_salida = "results/fig4"
 
 # Crear carpeta de salida si no existe
 os.makedirs(carpeta_salida, exist_ok=True)
