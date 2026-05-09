@@ -9,8 +9,9 @@
 #define MAX_ITER 1000000
 #define n 20
 
-#define resultados_beta "resultados/datos_sis.txt"
-#define rho_tiempo "resultados/rho_tiempo.txt"
+#define resultados_beta "results/sis_txt/datos_sis.txt"
+#define rho_tiempo "results/sis_txt/rho_tiempo.txt"
+#define rho_R0 "results/sis_txt/rho_R0.txt"
 
 // Parametros sistenma SIS
 typedef struct SIS
