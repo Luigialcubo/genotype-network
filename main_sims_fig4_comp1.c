@@ -67,7 +67,7 @@ int main() {
     /* ------------------------------
        Configuración de simulación
        ------------------------------ */
-    int nodo_inicial = 0;
+    int nodo_inicial = 1385;
     double t_max = 1000.0;
     int guardar_cada = 10;
 
