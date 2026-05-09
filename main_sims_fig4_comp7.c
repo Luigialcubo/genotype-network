@@ -28,7 +28,7 @@ int main() {
     const char *archivo_particion = "results/fig4/particion_comp7.txt";
 
     int nodo_inicial = 44;
-    double t_max = 1000.0;         
+    double t_max = 800.0;         
     int guardar_cada = 10;
 
     // Leer número de nodos N
