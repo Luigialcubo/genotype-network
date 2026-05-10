@@ -48,15 +48,14 @@ fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 8), sharex=True)
 
 # ---------- PANEL SUPERIOR: Prevalencia absoluta (área apilada) ----------
 ax1.stackplot(t, *I_comunidades.T, colors=colores, alpha=0.8)
-ax1.set_ylabel('Prevalencia absoluta')
-ax1.set_title('Componente 1: prevalencia por comunidad (absoluta)')
+ax1.set_ylabel('I(t) abs')
+ax1.set_title('Componente 1')
 ax1.grid(alpha=0.3)
 
 # ---------- PANEL INFERIOR: Prevalencia relativa (área apilada normalizada) ----------
 ax2.stackplot(t, *I_relativa.T, colors=colores, alpha=0.8)
-ax2.set_xlabel('Tiempo (días)')
-ax2.set_ylabel('Prevalencia relativa')
-ax2.set_title('Prevalencia relativa por comunidad')
+ax2.set_xlabel('t (días)')
+ax2.set_ylabel('I(t) rel')
 ax2.set_ylim(0, 1.0)
 ax2.grid(alpha=0.3)
 
