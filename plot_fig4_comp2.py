@@ -16,10 +16,11 @@ y_cols = df.iloc[:, 1:]  # columnas 1 a 6
 n_curves = y_cols.shape[1]
 
 # Nombres genéricos para las etiquetas
-etiquetas = [f'Columna {i+2}' for i in range(n_curves)]
+etiquetas = ['Comunidad 1','Comunidad 2','Comunidad 3','Comunidad 4','Comunidad 5','Comunidad 6']
 
 # Colores: usar un mapa de colores para un número variable de curvas
-colores = plt.cm.tab10(np.linspace(0, 1, n_curves))
+colores = ['#789e97', '#2d6280', '#202642', '#c93c2c', '#d76840', '#e4a166']
+
 
 # --- Normalización por fila (cada fila suma 1) ---
 row_sum = y_cols.sum(axis=1)
@@ -36,8 +37,10 @@ fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 10), sharex=True,
 for i, col in enumerate(y_cols.columns):
     ax1.plot(x, y_cols[col], color=colores[i], linewidth=1.5, label=etiquetas[i])
     ax1.fill_between(x, y_cols[col], alpha=0.3, color=colores[i])
-ax1.set_ylabel('Valores originales')
-ax1.set_title('Curvas originales y área bajo cada una')
+ax1.set_ylabel('I(t)', fontsize=16)
+ax1.set_title('COMPONENTE 2 INFLUENZA A', fontsize=20,fontweight='bold')
+ax1.set_xlim(0, 1000)
+ax1.set_ylim(0, 0.35)
 ax1.legend(loc='upper right', fontsize='small')
 ax1.grid(True, linestyle='--', alpha=0.5)
 
@@ -45,10 +48,10 @@ ax1.grid(True, linestyle='--', alpha=0.5)
 # Usamos stackplot con todas las columnas normalizadas
 stack_data = [df_norm.iloc[:, i] for i in range(1, n_curves + 1)]  # excluir columna 'x'
 ax2.stackplot(df_norm['x'], *stack_data, labels=etiquetas, colors=colores, alpha=0.7)
-ax2.set_xlabel('Primera columna (X)')
-ax2.set_ylabel('Proporción (normalizada por fila)')
+ax2.set_xlabel('t (días)', fontsize=16)
+ax2.set_ylabel(r"$I(t)^{rel}$", fontsize=16)
 ax2.set_ylim(0, 1)
-ax2.set_title('Contribución relativa de cada columna a lo largo de X (áreas apiladas)')
+ax2.set_xlim(0, 1000)
 ax2.legend(loc='upper right', fontsize='small')
 ax2.grid(True, linestyle='--', alpha=0.5)
 
@@ -58,4 +61,3 @@ os.makedirs(salida_dir, exist_ok=True)
 plt.tight_layout()
 plt.savefig(os.path.join(salida_dir, 'fig4_comp2.png'), dpi=300)
 print(f'Figura guardada en {os.path.join(salida_dir, "fig4_comp2.png")}')
-plt.show()
