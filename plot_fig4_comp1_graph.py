@@ -63,7 +63,7 @@ print(f"  Comunidades detectadas: {K} (IDs: {comunidades_unicas})")
 # ============================================================
 # 4. COLORES (paleta personalizada)
 # ============================================================
-colores_base = ['#789e97', '#2d6280', '#202642', '#c93c2c', '#d76840', '#e4a166']
+colores_base = ['#789e97', '#2d6280', '#202642', '#6b2a31', '#c93c2c', '#d76840', '#e4a166']
 
 def interpolar_colores(colors, num):
     """Crea una lista de num colores interpolando entre los dados."""
