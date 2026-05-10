@@ -1,22 +1,10 @@
 /*
  * main_sims_fig4_comp2.c
+ * Simula el modelo SIMS para la componente 2.
  *
- * Simulación del modelo SIMS para la componente 2.
- *
- * Lee:
- *   - Red:        componentes_conexas_temporales/componente_2_temporal_con_N.txt
- *   - Partición:  results/fig4/particion_comp2.txt
- *
- * Guarda:
- *   - results/fig4/sims_comp2.txt
- *
- * Formato de salida:
- *   t   I_total   I_comunidad_0   I_comunidad_1   ...
- *
- * Compilación:
+ * Compilar:
  *   gcc -o main_sims_fig4_comp2 main_sims_fig4_comp2.c rk4_sims.c -lm -std=c99 -Wall
- *
- * Ejecución:
+ * Ejecutar:
  *   ./main_sims_fig4_comp2
  */
 
@@ -24,22 +12,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* ------------------------------------------------------------
-   Calcula el grado de un nodo usando A_uni.
-   ------------------------------------------------------------ */
-double calcular_grado_nodo(double *A_uni, int N, int nodo) {
-    double grado = 0.0;
-    for (int j = 0; j < N; j++) {
-        grado += A_uni[nodo * N + j];
-    }
-    return grado;
-}
-
-/* ------------------------------------------------------------
-   Programa principal
-   ------------------------------------------------------------ */
 int main() {
-
+    // Parámetros del modelo (idénticos a los de la componente 7)
     ParametrosSIMS pa;
     pa.beta  = 0.3;
     pa.mu_0  = 0.1;
@@ -48,22 +22,17 @@ int main() {
     pa.delta = 3.0;
     pa.gamma = 0.0;
 
-    /* ------------------------------
-       Archivos (únicos que cambian)
-       ------------------------------ */
-    const char *archivo_red =
-        "componentes_conexas_temporales/componente_2_temporal_con_N.txt";
+    // Archivos específicos para la componente 2
+    const char *archivo_red       = "componentes_conexas/componente_2.txt";
+    const char *archivo_salida    = "results/fig4/sims_comp2.txt";
+    const char *archivo_particion = "results/fig4/particion_comp2.txt";
 
-    const char *archivo_salida =
-        "results/fig4/sims_comp2.txt";
-
-    const char *archivo_particion =
-        "results/fig4/particion_comp2.txt";
-
+    // El wild‑type es el nodo 646 según se indica
     int nodo_inicial = 646;
-    double t_max = 1000.0;
+    double t_max     = 1000.0;
     int guardar_cada = 10;
 
+    // Leer número de nodos N
     FILE *f_tmp = fopen(archivo_red, "r");
     if (!f_tmp) {
         printf("Error al abrir %s\n", archivo_red);
@@ -74,28 +43,9 @@ int main() {
     fclose(f_tmp);
     pa.N = N;
 
-    printf("========================================\n");
-    printf("SIMULACIÓN COMPONENTE 2\n");
-    printf("Red: %s\n", archivo_red);
-    printf("Partición: %s\n", archivo_particion);
-    printf("Salida: %s\n", archivo_salida);
-    printf("N = %d\n", N);
-    printf("Nodo inicial = %d\n", nodo_inicial);
-    printf("beta = %.4f\n", pa.beta);
-    printf("mu0 = %.4f\n", pa.mu_0);
-    printf("Dx = %.4e\n", pa.Dx);
-    printf("alfa = %.4f\n", pa.alfa);
-    printf("delta = %.4f\n", pa.delta);
-    printf("gamma = %.4f\n", pa.gamma);
-    printf("t_max = %.2f\n", t_max);
-    printf("========================================\n");
+    printf("Componente 2: N = %d\n", N);
 
-    if (nodo_inicial < 0 || nodo_inicial >= N) {
-        printf("Error: nodo_inicial = %d fuera de rango [0, %d]\n",
-               nodo_inicial, N - 1);
-        return 1;
-    }
-
+    // Reservar memoria para matrices y vectores
     double *A_uni = (double *)malloc(N * N * sizeof(double));
     double *X_uni = (double *)malloc(N * N * sizeof(double));
     double *rho   = (double *)malloc(N * sizeof(double));
@@ -106,15 +56,10 @@ int main() {
         return 1;
     }
 
+    // Cargar red (matrices de adyacencia y distancias)
     cargar_red(archivo_red, N, A_uni, X_uni);
 
-    double grado_inicial = calcular_grado_nodo(A_uni, N, nodo_inicial);
-    printf("Grado del nodo inicial %d = %.0f\n", nodo_inicial, grado_inicial);
-    if (grado_inicial <= 0.0) {
-        printf("ADVERTENCIA: el nodo inicial tiene grado 0.\n");
-        printf("Puede que la red no se haya cargado bien o que el nodo inicial no tenga vecinos.\n");
-    }
-
+    // Cargar partición de comunidades
     int *comm_id = (int *)malloc(N * sizeof(int));
     if (!comm_id) {
         printf("Error de memoria para comm_id\n");
@@ -131,62 +76,37 @@ int main() {
     }
     int nodo, com;
     while (fscanf(f_part, "%d %d", &nodo, &com) == 2) {
-        if (nodo >= 0 && nodo < N) comm_id[nodo] = com;
+        if (nodo >= 0 && nodo < N)
+            comm_id[nodo] = com;
     }
     fclose(f_part);
 
-    int max_com = -1;
-    for (int i = 0; i < N; i++) {
-        if (comm_id[i] > max_com) max_com = comm_id[i];
-    }
-    if (max_com < 0) {
-        printf("ADVERTENCIA: no se han cargado comunidades válidas.\n");
-        printf("Todos los nodos se asignarán a la comunidad 0.\n");
-        for (int i = 0; i < N; i++) comm_id[i] = 0;
-        max_com = 0;
-    }
-
-    int *map_com = (int *)malloc((max_com + 1) * sizeof(int));
+    // Mapear IDs originales a índices compactos 0..K-1
+    int K = 0;
+    int *map_com = (int *)malloc(N * sizeof(int));
     if (!map_com) {
-        printf("Error de memoria para map_com\n");
+        printf("Error de memoria\n");
         free(comm_id); free(A_uni); free(X_uni); free(rho); free(mu);
         return 1;
     }
-    for (int i = 0; i <= max_com; i++) map_com[i] = -1;
-    int K = 0;
+    for (int i = 0; i < N; i++) map_com[i] = -1;
     for (int i = 0; i < N; i++) {
         int cid = comm_id[i];
-        if (cid >= 0 && cid <= max_com && map_com[cid] == -1) {
+        if (cid != -1 && map_com[cid] == -1) {
             map_com[cid] = K;
             K++;
         }
     }
-    if (K == 0) K = 1;
     for (int i = 0; i < N; i++) {
-        int cid = comm_id[i];
-        if (cid >= 0 && cid <= max_com && map_com[cid] != -1)
-            comm_id[i] = map_com[cid];
+        if (comm_id[i] != -1)
+            comm_id[i] = map_com[comm_id[i]];
         else
-            comm_id[i] = 0;
+            comm_id[i] = 0;   // Nodos no asignados van a comunidad 0
     }
     free(map_com);
-    printf("Comunidades cargadas y remapeadas: K = %d\n", K);
+    printf("Comunidades detectadas: %d\n", K);
 
-    int *count_comm = (int *)calloc(K, sizeof(int));
-    if (!count_comm) {
-        printf("Error de memoria para count_comm\n");
-        free(comm_id); free(A_uni); free(X_uni); free(rho); free(mu);
-        return 1;
-    }
-    for (int i = 0; i < N; i++) {
-        int cid = comm_id[i];
-        if (cid >= 0 && cid < K) count_comm[cid]++;
-    }
-    printf("Tamaño de comunidades:\n");
-    for (int c = 0; c < K; c++)
-        printf("  Comunidad %d: %d nodos\n", c, count_comm[c]);
-    free(count_comm);
-
+    // Prevalencia por comunidad
     double *I_comm = (double *)malloc(K * sizeof(double));
     if (!I_comm) {
         printf("Error de memoria para I_comm\n");
@@ -194,13 +114,14 @@ int main() {
         return 1;
     }
 
+    // Condiciones iniciales
     for (int i = 0; i < N; i++) {
         rho[i] = 0.0;
         mu[i]  = pa.mu_0;
     }
     rho[nodo_inicial] = 0.01;
-    printf("Condición inicial: rho[%d] = %.6f\n", nodo_inicial, rho[nodo_inicial]);
 
+    // Archivo de salida
     FILE *salida = fopen(archivo_salida, "w");
     if (!salida) {
         printf("Error creando %s\n", archivo_salida);
@@ -208,22 +129,24 @@ int main() {
         return 1;
     }
 
+    // Integración
     double t = 0.0;
     int max_iter = (int)(t_max / dT);
-    printf("Simulando...\n");
+    printf("Simulando componente 2...\n");
 
     for (int iter = 0; iter < max_iter; iter++) {
         if (iter % guardar_cada == 0) {
-            for (int c = 0; c < K; c++) I_comm[c] = 0.0;
-            double I_total = 0.0;
+            // Calcular I_comm
+            for (int i = 0; i < K; i++) I_comm[i] = 0.0;
             for (int i = 0; i < N; i++) {
                 int cid = comm_id[i];
-                if (cid >= 0 && cid < K) I_comm[cid] += rho[i];
-                I_total += rho[i];
+                I_comm[cid] += rho[i];
             }
-            fprintf(salida, "%.6f\t%.12e", t, I_total);
-            for (int c = 0; c < K; c++)
-                fprintf(salida, "\t%.12e", I_comm[c]);
+            // Escribir tiempo y comunidades (K columnas)
+            fprintf(salida, "%.6f", t);
+            for (int i = 0; i < K; i++) {
+                fprintf(salida, "\t%.6f", I_comm[i]);
+            }
             fprintf(salida, "\n");
         }
         paso_rk4_sims(rho, mu, X_uni, A_uni, pa);
@@ -231,7 +154,6 @@ int main() {
     }
 
     fclose(salida);
-
     free(I_comm);
     free(comm_id);
     free(A_uni);
