@@ -41,11 +41,11 @@ plt.plot(sis[:,0], sis[:,1], lw=3, label="SIS")
 plt.plot(sir[:,0], sir[:,1], lw=3, label="SIR")
 plt.plot(sirs[:,0], sirs[:,1], lw=3, label="SIRS")
 
-plt.xlabel("t")
-plt.ylabel("I(t)")
+plt.xlabel("t (días)",fontsize=16)
+plt.ylabel("I(t)",fontsize=16)
 plt.xlim(0, 200)
 plt.ylim(0, 0.7) 
-plt.title("Dinámica temporal del modelo SIMS para una sola cepa", fontsize=14)
+##plt.title("DINÁMICA TEMPORAL DEL MODELO SIMS PARA UNA SOLA CEPA", fontsize=20,fontweight='bold')
 plt.legend()
 plt.tight_layout()
 plt.savefig(
@@ -81,20 +81,20 @@ for i in range(n):
         color=cmap(i)
     )
 
-ax.set_xlabel(r"$t$", fontsize=18)
-ax.set_ylabel(r"$i$", fontsize=18)
-ax.set_zlabel(r"$\rho_i^I$", fontsize=18)
+ax.set_xlabel("t(días)", fontsize=16)
+ax.set_ylabel("i", fontsize=16)
+ax.set_zlabel(r"$\rho_i$", fontsize=16)
 
 ax.set_yticks([0, 10, 19])
 ax.set_yticklabels(["0", "10", "20"])
 
 ax.set_xlim(0, 1000)
 ax.set_ylim(0, n - 1)
-ax.set_zlim(0, 0.6)
+ax.set_zlim(0, 0.5)
 
 ax.view_init(elev=20, azim=-65)
 
-plt.title("Dinámica temporal del modelo SIMS sin inmunidad cruzada", fontsize=18)
+##ax.set_title("DINÁMICA TEMPORAL SIN INMUNIDAD CRUZADA PARA UNA CADENA LINEAL DE 20 CEPAS", fontsize=20, fontweight='bold')
 
 plt.tight_layout()
 plt.savefig("plots/fig1_1/fig1_1_b.png", dpi=300, bbox_inches="tight")
@@ -136,11 +136,11 @@ ax.set_yticklabels(["0", "10", "20"])
 
 ax.set_xlim(0, 1000)
 ax.set_ylim(0, n - 1)
-ax.set_zlim(0, 0.6)
+ax.set_zlim(0, 0.5)
 
 ax.view_init(elev=20, azim=-65)
 
-plt.title("Dinámica temporal del modelo SIMS considerando inmunidad cruzada", fontsize=18)
+##plt.title("Dinámica temporal del modelo SIMS considerando inmunidad cruzada", fontsize=18)
 
 plt.tight_layout()
 plt.savefig("plots/fig1_1/fig1_1_c.png", dpi=300, bbox_inches="tight")
