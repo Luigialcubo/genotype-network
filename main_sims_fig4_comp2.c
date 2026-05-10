@@ -60,7 +60,7 @@ int main() {
     const char *archivo_particion =
         "results/fig4/particion_comp2.txt";
 
-    int nodo_inicial = 0;
+    int nodo_inicial = 646;
     double t_max = 1000.0;
     int guardar_cada = 10;
 

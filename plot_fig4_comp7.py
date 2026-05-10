@@ -24,10 +24,10 @@ os.makedirs(CARPETA_SALIDA, exist_ok=True)
 # ============================================================
 datos = np.loadtxt(ARCHIVO_DATOS)
 t = datos[:, 0]                  # columna de tiempo
-I_comunidades = datos[:, 2:]     # columnas de comunidades (ignoramos la 1: I_total)
-K = I_comunidades.shape[1]       # número de comunidades
+I_comunidades = datos[:, 2:]     # 4 columnas de comunidades (ya no hay I_total separada)
+K = I_comunidades.shape[1]       # número de comunidades (4)
 
-# Prevalencia total como suma de comunidades
+# Prevalencia total como suma de las comunidades
 I_total = np.sum(I_comunidades, axis=1)
 
 # Prevalencias relativas (evitar división por cero)
@@ -62,8 +62,7 @@ ax2.set_xlim(0, 800.0)
 ax2.set_ylim(0, 1.0)
 ax2.grid(alpha=0.3)
 
-# Leyenda común (se puede colocar fuera o dentro)
-# Creamos una leyenda con los colores y etiquetas de las comunidades
+# Leyenda común
 from matplotlib.patches import Patch
 leyenda = [Patch(facecolor=colores[i], label=f'Comunidad {i+1}') for i in range(K)]
 fig.legend(handles=leyenda, loc='upper right', bbox_to_anchor=(0.98, 0.95))

@@ -157,7 +157,7 @@ int main(){
 
     // SIMS sin inmunidad cruzada(1.1.b)
     do{
-        R_efectivob=pa_simsb.beta*(1-I_simsb)/mu_simsb[9];
+        R_efectivob=pa_simsb.beta*(1-I_simsb)/mu_simsb[10];
         fprintf(archivo_simsb, "%f\t", t_simsb);
         for(i=0;i<n;i++){
             fprintf(archivo_simsb, "%f\t", rho_simsb[i]);
@@ -177,7 +177,7 @@ int main(){
 
     // SIMS con inmunidad cruzada (1.1.c)
     do{
-        R_efectivoc=pa_simsc.beta*(1-I_simsc)/mu_simsc[9];
+        R_efectivoc=pa_simsc.beta*(1-I_simsc)/mu_simsc[10];
         fprintf(archivo_simsc, "%f\t", t_simsc);
         for(i=0;i<n;i++){
             fprintf(archivo_simsc, "%f\t", rho_simsc[i]);
