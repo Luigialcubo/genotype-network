@@ -52,9 +52,7 @@ os.makedirs(carpeta_salida, exist_ok=True)
 
 # Número de comunidades objetivo según el artículo
 target_communities = {
-    1: 7,
-    2: 6,
-    7: 4
+    2: 2,
 }
 
 for comp_id, target in target_communities.items():
