@@ -18,8 +18,8 @@ df_norm = df[['y1', 'y2', 'y3', 'y4']].div(row_sum, axis=0).fillna(0)
 df_norm.insert(0, 'x', df['x'])
 
 # Colores y etiquetas
-colores = ['blue', 'green', 'red', 'orange']
-etiquetas = ['Columna 2', 'Columna 3', 'Columna 4', 'Columna 5']
+colores = ['#c93c2c', '#789e97', '#202642', '#e4a166']
+etiquetas = ['Comunidad 3', 'Comunidad 1', 'Comunidad 2', 'Comunidad 4']
 
 # Crear figura con dos subplots
 fig, (ax1, ax2) = plt.subplots(
@@ -34,8 +34,8 @@ fig, (ax1, ax2) = plt.subplots(
 for i, col in enumerate(['y1', 'y2', 'y3', 'y4']):
     ax1.plot(df['x'], df[col], color=colores[i], linewidth=1.5, label=etiquetas[i])
     ax1.fill_between(df['x'], df[col], alpha=0.3, color=colores[i])
-ax1.set_ylabel('Valores originales')
-ax1.set_title('Curvas originales y área bajo cada una')
+ax1.set_ylabel('I(t) abs')
+ax1.set_title('Componente 7')
 ax1.legend()
 ax1.grid(True, linestyle='--', alpha=0.5)
 
@@ -44,10 +44,10 @@ ax1.grid(True, linestyle='--', alpha=0.5)
 ax2.stackplot(df_norm['x'], 
               df_norm['y1'], df_norm['y2'], df_norm['y3'], df_norm['y4'],
               labels=etiquetas, colors=colores, alpha=0.7)
-ax2.set_xlabel('Primera columna (X)')
-ax2.set_ylabel('Proporción (normalizada por fila)')
+ax2.set_xlabel('t (dias)')
+ax2.set_ylabel('I(t) rel')
 ax2.set_ylim(0, 1)  # Aseguramos que el eje Y llegue hasta 1
-ax2.set_title('Contribución relativa de cada columna a lo largo de X (áreas apiladas)')
+#ax2.set_title('Contribución relativa de cada columna a lo largo de X (áreas apiladas)')
 ax2.legend(loc='upper right')
 ax2.grid(True, linestyle='--', alpha=0.5)
 
