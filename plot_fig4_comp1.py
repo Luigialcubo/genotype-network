@@ -24,7 +24,7 @@ os.makedirs(CARPETA_SALIDA, exist_ok=True)
 # ============================================================
 datos = np.loadtxt(ARCHIVO_DATOS)
 t = datos[:, 0]                  # columna de tiempo
-I_comunidades = datos[:, 2:]     # columnas de comunidades (ignoramos la 1: I_total)
+I_comunidades = datos[:, 1:]     # columnas de comunidades
 K = I_comunidades.shape[1]       # número de comunidades
 
 # Prevalencia total como suma de comunidades
