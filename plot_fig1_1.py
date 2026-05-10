@@ -81,7 +81,7 @@ for i in range(n):
         color=cmap(i)
     )
 
-ax.set_xlabel("t(días)", fontsize=16)
+ax.set_xlabel("t", fontsize=16)
 ax.set_ylabel("i", fontsize=16)
 ax.set_zlabel(r"$\rho_i$", fontsize=16)
 
@@ -92,7 +92,7 @@ ax.set_xlim(0, 1000)
 ax.set_ylim(0, n - 1)
 ax.set_zlim(0, 0.5)
 
-ax.view_init(elev=20, azim=-65)
+ax.view_init(elev=16, azim=-65)
 
 ##ax.set_title("DINÁMICA TEMPORAL SIN INMUNIDAD CRUZADA PARA UNA CADENA LINEAL DE 20 CEPAS", fontsize=20, fontweight='bold')
 
@@ -138,7 +138,7 @@ ax.set_xlim(0, 1000)
 ax.set_ylim(0, n - 1)
 ax.set_zlim(0, 0.5)
 
-ax.view_init(elev=20, azim=-65)
+ax.view_init(elev=16, azim=-65)
 
 ##plt.title("Dinámica temporal del modelo SIMS considerando inmunidad cruzada", fontsize=18)
 
@@ -163,7 +163,7 @@ fig, ax1 = plt.subplots(figsize=(4,3))
 
 # rho
 ax1.plot(t, rho_cepa, color="#8B2E2E", lw=3)
-ax.set_xlabel(r"$t$", fontsize=18)
+ax1.set_xlabel("t", fontsize=18)
 ax1.set_ylabel(r"$\rho_{10}$", color="#8B2E2E", fontsize=20)
 ax1.tick_params(axis="y", colors="#8B2E2E", labelsize=16)
 ax1.set_ylim(0, 0.3)
@@ -182,7 +182,7 @@ ax2.tick_params(axis="y", colors="gray", labelsize=16)
 ax2.set_ylim(0, 4)
 
 # eje x REAL
-ax1.set_xlim(400, 700)
+ax2.set_xlim(400, 700)
 
 
 
@@ -207,7 +207,7 @@ fig, ax1 = plt.subplots(figsize=(4,3))
 
 # rho
 ax1.plot(t, rho_cepa, color="#8B2E2E", lw=3)
-ax.set_xlabel(r"$t$", fontsize=18)
+ax1.set_xlabel("t", fontsize=18)
 ax1.set_ylabel(r"$\rho_{10}$", color="#8B2E2E", fontsize=20)
 ax1.tick_params(axis="y", colors="#8B2E2E", labelsize=16)
 ax1.set_ylim(0, 0.3)
