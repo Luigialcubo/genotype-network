@@ -1,70 +1,61 @@
-"""
-Ejecutar: py plot_fig4_comp2.py
-Genera la gráfica de la componente 2 de la red de Influenza A (Figura 4 del artículo):
-  - Arriba: prevalencia absoluta de cada comunidad (área apilada).
-  - Abajo: prevalencia relativa por comunidad (área apilada, normalizada a 1).
+'''Ejecutar: py plot_fig4_comp2.py'''
 
-Lee los datos de results/fig4/sims_comp2.txt.
-Guarda la figura en plots/fig4/fig4_comp2.png
-"""
-
-import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 import os
 
-# ============================================================
-# 1. CONFIGURACIÓN DE RUTAS
-# ============================================================
-ARCHIVO_DATOS = "results/fig4/sims_comp2.txt"
-CARPETA_SALIDA = "plots/fig4"
-os.makedirs(CARPETA_SALIDA, exist_ok=True)
+# Cargar los datos (sin cabecera, separador de espacios/tabulaciones)
+# El archivo tiene 7 columnas: x, y1, y2, y3, y4, y5, y6
+df = pd.read_csv('results/fig4/sims_comp2.txt', sep=r'\s+', header=None)
 
-# ============================================================
-# 2. CARGA DE DATOS
-# ============================================================
-datos = np.loadtxt(ARCHIVO_DATOS)
-t = datos[:, 0]                  # columna de tiempo
-I_comunidades = datos[:, 2:]     # columnas de comunidades (ignoramos la 1: I_total)
-K = I_comunidades.shape[1]       # número de comunidades
+# La primera columna es x
+x = df[0]
+# El resto son las curvas y
+y_cols = df.iloc[:, 1:]  # columnas 1 a 6
+n_curves = y_cols.shape[1]
 
-# Prevalencia total como suma de comunidades
-I_total = np.sum(I_comunidades, axis=1)
+# Nombres genéricos para las etiquetas
+etiquetas = [f'Columna {i+2}' for i in range(n_curves)]
 
-# Prevalencias relativas (evitar división por cero)
-I_relativa = np.zeros_like(I_comunidades)
-mascara = I_total > 1e-12
-for i in range(K):
-    I_relativa[mascara, i] = I_comunidades[mascara, i] / I_total[mascara]
+# Colores: usar un mapa de colores para un número variable de curvas
+colores = plt.cm.tab10(np.linspace(0, 1, n_curves))
 
-# ============================================================
-# 3. COLORES
-# ============================================================
-colores = plt.cm.tab10(np.linspace(0, 1, max(K, 10)))[:K]
+# --- Normalización por fila (cada fila suma 1) ---
+row_sum = y_cols.sum(axis=1)
+# Evitar división por cero
+df_norm = y_cols.div(row_sum, axis=0).fillna(0)
+# Añadir la columna x
+df_norm.insert(0, 'x', x)
 
-# ============================================================
-# 4. CREACIÓN DE LA FIGURA
-# ============================================================
-fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 8), sharex=True)
+# Crear figura con dos subplots (3:1.5 para mejor contraste)
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 10), sharex=True,
+                               gridspec_kw={'height_ratios': [3, 1.5]})
 
-# ---------- PANEL SUPERIOR: Prevalencia absoluta (área apilada) ----------
-ax1.stackplot(t, *I_comunidades.T, colors=colores, alpha=0.8)
-ax1.set_ylabel('I(t) abs')
-ax1.set_title('Componente 2')
-ax1.grid(alpha=0.3)
+# ---- Gráfica 1: valores originales (área bajo cada curva individual) ----
+for i, col in enumerate(y_cols.columns):
+    ax1.plot(x, y_cols[col], color=colores[i], linewidth=1.5, label=etiquetas[i])
+    ax1.fill_between(x, y_cols[col], alpha=0.3, color=colores[i])
+ax1.set_ylabel('Valores originales')
+ax1.set_title('Curvas originales y área bajo cada una')
+ax1.legend(loc='upper right', fontsize='small')
+ax1.grid(True, linestyle='--', alpha=0.5)
 
-# ---------- PANEL INFERIOR: Prevalencia relativa (área apilada normalizada) ----------
-ax2.stackplot(t, *I_relativa.T, colors=colores, alpha=0.8)
-ax2.set_xlabel('t (días)')
-ax2.set_ylabel('I(t) rel')
-ax2.set_ylim(0, 1.0)
-ax2.grid(alpha=0.3)
+# ---- Gráfica 2: valores normalizados por fila (área apilada, suma = 1 en cada x) ----
+# Usamos stackplot con todas las columnas normalizadas
+stack_data = [df_norm.iloc[:, i] for i in range(1, n_curves + 1)]  # excluir columna 'x'
+ax2.stackplot(df_norm['x'], *stack_data, labels=etiquetas, colors=colores, alpha=0.7)
+ax2.set_xlabel('Primera columna (X)')
+ax2.set_ylabel('Proporción (normalizada por fila)')
+ax2.set_ylim(0, 1)
+ax2.set_title('Contribución relativa de cada columna a lo largo de X (áreas apiladas)')
+ax2.legend(loc='upper right', fontsize='small')
+ax2.grid(True, linestyle='--', alpha=0.5)
 
-# Leyenda común
-from matplotlib.patches import Patch
-leyenda = [Patch(facecolor=colores[i], label=f'Comunidad {i+1}') for i in range(K)]
-fig.legend(handles=leyenda, loc='upper right', bbox_to_anchor=(0.98, 0.95))
-
+# Guardar la figura en plots/fig4
+salida_dir = 'plots/fig4'
+os.makedirs(salida_dir, exist_ok=True)
 plt.tight_layout()
-plt.savefig(os.path.join(CARPETA_SALIDA, 'fig4_comp2.png'), dpi=300)
+plt.savefig(os.path.join(salida_dir, 'fig4_comp2.png'), dpi=300)
+print(f'Figura guardada en {os.path.join(salida_dir, "fig4_comp2.png")}')
 plt.show()
-print(f"Figura guardada en {CARPETA_SALIDA}/fig4_comp2.png")
