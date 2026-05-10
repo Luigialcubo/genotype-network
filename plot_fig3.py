@@ -17,7 +17,7 @@ import os
 # 0. CONFIGURACIÓN DE RUTAS
 # ============================================================
 # Redes
-RED_LATTICE = "results/redes_txt/reticula_3x70.txt"
+RED_LATTICE = "results/redes_txt/reticula_3x50.txt"
 RED_HOMOG   = "results/redes_txt/red_homogenea.txt"
 RED_HETEROG = "results/redes_txt/red_heterogenea.txt"
 
@@ -130,8 +130,8 @@ ax_b.plot(t_lat_g0, I_lat_g0, color=COLOR_LATTICE, lw=2, label='Lattice')
 ax_b.plot(t_hom_g0, I_hom_g0, color=COLOR_HOMOG,   lw=2, label='Estrellas homog.')
 ax_b.plot(t_het_g0, I_het_g0, color=COLOR_HETEROG, lw=2, label='Estrellas heterog.')
 
-ax_b.set_xlabel('Tiempo (días)')
-ax_b.set_ylabel('Prevalencia $I(t)$')
+ax_b.set_xlabel('t (días)')
+ax_b.set_ylabel('I(t)')
 ax_b.set_title('(b) Inmunidad duradera ($\\gamma=0$)')
 ax_b.legend(frameon=False)
 ax_b.grid(alpha=0.3)
@@ -151,8 +151,8 @@ ax_c.plot(t_lat_g03, I_lat_g03, color=COLOR_LATTICE, lw=2, label='Lattice')
 ax_c.plot(t_hom_g03, I_hom_g03, color=COLOR_HOMOG,   lw=2, label='Estrellas homog.')
 ax_c.plot(t_het_g03, I_het_g03, color=COLOR_HETEROG, lw=2, label='Estrellas heterog.')
 
-ax_c.set_xlabel('Tiempo (días)')
-ax_c.set_ylabel('Prevalencia $I(t)$')
+ax_c.set_xlabel('t (días)')
+ax_c.set_ylabel('I(t)')
 ax_c.set_title('(c) Inmunidad temporal ($\\alpha=\\gamma=0.03$)')
 ax_c.legend(frameon=False)
 ax_c.grid(alpha=0.3)
