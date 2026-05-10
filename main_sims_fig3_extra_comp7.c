@@ -21,7 +21,7 @@ int main(){
     pa_het_gamma_003.alfa  = 0.03;
     pa_het_gamma_003.delta = 3.0;        // inmunidad cruzada con alcance 3
     pa_het_gamma_003.gamma = 0.03;
-    pa_het_gamma_003.N     = 430;
+    pa_het_gamma_003.N     = 156;
     double beta_original_het_003 = pa_het_gamma_003.beta;
     int contador = 0;
 
@@ -91,20 +91,20 @@ int main(){
     
 
     FILE *sims_het_gamma_0;
-    FILE *sims_het_gamma_003_extra;
+    FILE *sims_het_gamma_003_extra_comp7;
     FILE *sims_hom_gamma_0;
     FILE *sims_hom_gamma_003;
     FILE *sims_reticula_gamma_0;
     FILE *sims_reticula_gamma_003;
 
     sims_het_gamma_0 = fopen("results/fig3/sims_het_gamma_0.txt", "w");
-    sims_het_gamma_003_extra = fopen("results/fig3/sims_het_gamma_003_extra.txt", "w");
+    sims_het_gamma_003_extra_comp7 = fopen("results/fig3/sims_het_gamma_003_extra_comp7.txt", "w");
     sims_hom_gamma_0 = fopen("results/fig3/sims_hom_gamma_0.txt", "w");
     sims_hom_gamma_003 = fopen("results/fig3/sims_hom_gamma_003.txt", "w");
     sims_reticula_gamma_0 = fopen("results/fig3/sims_reticula_gamma_0.txt", "w");
     sims_reticula_gamma_003 = fopen("results/fig3/sims_reticula_gamma_003.txt", "w");
 
-    if (sims_het_gamma_0 == NULL || sims_het_gamma_003_extra == NULL || sims_hom_gamma_0 == NULL || sims_hom_gamma_003 == NULL || sims_reticula_gamma_0 == NULL || sims_reticula_gamma_003 == NULL) {
+    if (sims_het_gamma_0 == NULL || sims_het_gamma_003_extra_comp7 == NULL || sims_hom_gamma_0 == NULL || sims_hom_gamma_003 == NULL || sims_reticula_gamma_0 == NULL || sims_reticula_gamma_003 == NULL) {
         printf("Error: No se pudo abrir el archivo.\n");
         return 1; 
     }
@@ -141,7 +141,7 @@ int main(){
         return 1;
     }
 
-    cargar_red("results/redes_txt/red_heterogenea.txt", pa_het_gamma_003.N, A_uni_het, X_uni_het);
+    cargar_red("componentes_conexas/componente_7.txt", pa_het_gamma_003.N, A_uni_het, X_uni_het);
     //cargar_red("results/redes_txt/red_homogenea.txt", pa_hom_gamma_0.N, A_uni_hom, X_uni_hom);
     //cargar_red("results/redes_txt/reticula_3x50.txt", pa_reticula_gamma_0.N, A_uni_reticula, X_uni_reticula);
 /*
@@ -159,7 +159,7 @@ int main(){
 */
     // SIMS het gamma = 003 //caso confinamiento I ~0.25 para aplicar un confinamiento
     do{
-        fprintf(sims_het_gamma_003_extra, "%f\t%f\n", t_het_gamma_003, I_het_gamma_003);
+        fprintf(sims_het_gamma_003_extra_comp7, "%f\t%f\n", t_het_gamma_003, I_het_gamma_003);
         I_het_gamma_003 = 0;
         paso_rk4_sims(rho_het_gamma_003,mu_het_gamma_003,X_uni_het,A_uni_het,pa_het_gamma_003);
         for(i=0;i<pa_het_gamma_003.N;i++){
@@ -183,7 +183,7 @@ int main(){
         iter_het_gamma_003++;
 
         printf("%d\n", iter_het_gamma_003);
-    } while (iter_het_gamma_003 < (500/dT));
+    } while (iter_het_gamma_003 < (480/dT));
 /*
     // SIMS hom gamma = 0
     do{
@@ -234,7 +234,7 @@ int main(){
     } while (iter_reticula_gamma_003 < (2000/dT));
 */
     fclose(sims_het_gamma_0);
-    fclose(sims_het_gamma_003_extra);
+    fclose(sims_het_gamma_003_extra_comp7);
     fclose(sims_hom_gamma_0);
     fclose(sims_hom_gamma_003);
     fclose(sims_reticula_gamma_0);

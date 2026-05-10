@@ -210,7 +210,7 @@ int main(){
         
         
         
-    } while (iter_het_gamma_003 < (1000/dT));
+    } while (iter_het_gamma_003 < (2000/dT));
 /*
     // SIMS hom gamma = 0
     do{
