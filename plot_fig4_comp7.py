@@ -18,8 +18,8 @@ df_norm = df[['y1', 'y2', 'y3', 'y4']].div(row_sum, axis=0).fillna(0)
 df_norm.insert(0, 'x', df['x'])
 
 # Colores y etiquetas
-colores = ['#789e97', '#202642','#c93c2c', '#e4a166']
-etiquetas = ['Comunidad 1', 'Comunidad 2', 'Comunidad 3', 'Comunidad 4']
+colores = ['#c93c2c','#789e97', '#202642', '#e4a166']
+etiquetas = ['Comunidad 3', 'Comunidad 1', 'Comunidad 2', 'Comunidad 4']
 
 # Crear figura con dos subplots
 fig, (ax1, ax2) = plt.subplots(
