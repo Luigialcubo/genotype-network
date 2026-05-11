@@ -93,6 +93,16 @@ nx.draw(
     with_labels=False
 )
 
+# Mostrar el número de cada nodo en el grafo
+nx.draw_networkx_labels(
+    G,
+    pos,
+    labels={n: str(n) for n in G.nodes()},
+    font_size=6,
+    font_color='black'
+)
+
+
 ax.set_title("Componente 2 – Comunidades detectadas")
 ax.axis('off')
 
