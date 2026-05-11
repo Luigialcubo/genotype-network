@@ -112,7 +112,7 @@ if __name__ == "__main__":
     exportar_txt(red_homogenea, "red_homogenea_3bloques.txt")
 
     #Red 2 heterogenea, 5 clusters
-    hojas_heterogenea = [31, 0, 0, 0, 43, 0, 0, 0, 27]
+    hojas_heterogenea = [52, 0, 0, 0, 15, 0, 0, 0, 31]
     red_heterogenea = crear_cadena_estrellas(9, hojas_heterogenea)
     #guardar_grafico(red_heterogenea, "cadena_estrellas_heterogenea.png",
            #         "Cadena de estrellas heterogénea")
