@@ -38,7 +38,7 @@ ax1.set_ylabel('I(t)', fontsize=16)
 ax1.set_title('COMPONENTE 7 INFLUENZA A', fontsize=20,fontweight='bold')
 ax1.set_ylim(0, 0.35) 
 ax1.set_xlim(0, 800)
-ax1.legend()
+ax1.legend(loc='upper right', fontsize='large')
 ax1.grid(True, linestyle='--', alpha=0.5)
 
 # ---- Gráfica 2: valores normalizados por fila (área apilada, suma 1 en cada x) ----
@@ -51,7 +51,7 @@ ax2.set_ylabel(r"$I(t)^{rel}$", fontsize=16,)
 ax2.set_ylim(0, 1) 
 ax2.set_xlim(0, 800)  
 #ax2.set_title('Contribución relativa de cada columna a lo largo de X (áreas apiladas)')
-ax2.legend(loc='upper right')
+ax2.legend(loc='lower left', fontsize='large')
 ax2.grid(True, linestyle='--', alpha=0.5)
 
 # Guardar la figura en plots/fig4

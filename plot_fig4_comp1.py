@@ -101,9 +101,9 @@ for i in range(7):
 
 ax1.set_ylabel('I(t)', fontsize=16)
 ax1.set_title('COMPONENTE 1 INFLUENZA A', fontsize=20, fontweight='bold')
-ax1.set_xlim(0, 1000)
+ax1.set_xlim(0, 900)
 ax1.set_ylim(0, None)   # ajuste automático
-ax1.legend(loc='upper right', fontsize='small')
+ax1.legend(loc='upper right', fontsize='large')
 ax1.grid(True, linestyle='--', alpha=0.5)
 
 # ---------- PANEL INFERIOR: prevalencia relativa apilada ----------
@@ -112,8 +112,8 @@ ax2.stackplot(t, *[relativa[:, i] for i in range(7)],
 ax2.set_xlabel('t (días)', fontsize=16)
 ax2.set_ylabel(r"$I(t)^{rel}$", fontsize=16)
 ax2.set_ylim(0, 1)
-ax2.set_xlim(0, 1000)
-ax2.legend(loc='upper right', fontsize='small')
+ax2.set_xlim(0, 900)
+ax2.legend(loc='lower left', fontsize='large')
 ax2.grid(True, linestyle='--', alpha=0.5)
 
 plt.tight_layout()
