@@ -154,7 +154,7 @@ ax_c.plot(t_het_g03, I_het_g03, color=COLOR_HETEROG, lw=2, label='Estrellas hete
 ax_c.set_xlabel('Tiempo (días)')
 ax_c.set_ylabel('Prevalencia $I(t)$')
 ax_c.set_title('(c) Inmunidad temporal ($\\alpha=\\gamma=0.03$)')
-ax_c.legend(frameon=False)
+ax_c.legend(["Componente 7 Influenza A"], loc='lower right', fontsize=8)
 ax_c.grid(alpha=0.3)
 
 plt.tight_layout()
