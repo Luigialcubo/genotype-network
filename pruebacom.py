@@ -95,7 +95,7 @@ def plot_red_comunidades(
         alpha=0.15,
         width=0.5
     )
-
+    
     nx.draw_networkx_nodes(
         G,
         pos,
@@ -103,7 +103,16 @@ def plot_red_comunidades(
         node_size=40,
         linewidths=0
     )
-
+    '''
+    # Mostrar el número de cada nodo en el grafo
+    nx.draw_networkx_labels(
+        G,
+        pos,
+        labels={n: str(n) for n in G.nodes()},
+        font_size=6,
+        font_color='black'
+    )
+    '''
     leyenda = [
         Line2D(
             [0],
