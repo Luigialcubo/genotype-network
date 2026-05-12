@@ -20,7 +20,6 @@ def leer_aristas(path):
 
     for linea in lineas[1:]:
         partes = linea.strip().split()
-
         if len(partes) >= 2:
             i = int(partes[0])
             j = int(partes[1])
@@ -33,18 +32,20 @@ def plot_red_comunidades(
     archivo_comunidades,
     archivo_aristas,
     salida="red_comunidades.png",
+    colores=None,      # <-- lista de colores (opcional)
     seed=7
 ):
-
-    colores = [
-        "#789e97",
-        "#2d6280",
-        "#202642",
-        "#6b2a31",
-        "#c93c2c",
-        "#d76840",
-        "#e4a166"
-    ]
+    # Paleta por defecto (si no se pasa una lista de colores)
+    if colores is None:
+        colores = [
+            "#789e97",
+            "#2d6280",
+            "#202642",
+            "#6b2a31",
+            "#c93c2c",
+            "#d76840",
+            "#e4a166"
+        ]
 
     comunidades = leer_comunidades(archivo_comunidades)
     n_nodos, aristas = leer_aristas(archivo_aristas)
@@ -128,26 +129,37 @@ def plot_red_comunidades(
     plt.savefig(salida, dpi=300, bbox_inches="tight")
 
 
+# ============================================================
+# LLAMADAS CON PALETAS DIFERENTES PARA CADA COMPONENTE
+# (cambia los colores por los que tú quieras)
+# ============================================================
 
+# Componente 1 (7 colores de ejemplo)
 plot_red_comunidades(
     archivo_comunidades="results/fig4/particion_comp1.txt",
     archivo_aristas="componentes_conexas/componente_1.txt",
-    salida="plots/fig4/fig4_comp1grafo_prueba.png"
+    salida="plots/fig4/fig4_comp1grafo_prueba.png",
+    colores=[
+        "#789e97", "#2d6280", "#202642", "#6b2a31", "#c93c2c", "#d76840", "#e4a166"
+    ]
 )
 
+# Componente 2 (6 colores de ejemplo)
 plot_red_comunidades(
     archivo_comunidades="results/fig4/particion_comp2.txt",
     archivo_aristas="componentes_conexas/componente_2.txt",
-    salida="plots/fig4/fig4_comp2grafo_prueba.png"
+    salida="plots/fig4/fig4_comp2grafo_prueba.png",
+    colores=[
+        "#789e97", "#2d6280", "#202642", "#c93c2c", "#d76840", "#e4a166"
+    ]
 )
 
+# Componente 7 (4 colores de ejemplo)
 plot_red_comunidades(
     archivo_comunidades="results/fig4/particion_comp7.txt",
     archivo_aristas="componentes_conexas/componente_7.txt",
-    salida="plots/fig4/fig4_comp7grafo_prueba.png"
+    salida="plots/fig4/fig4_comp7grafo_prueba.png",
+    colores=[
+        "#789e97", "#202642", "#c93c2c", "#e4a166"
+    ]
 )
-
-
-
-
-
